@@ -32,31 +32,41 @@ const {
   image,
   ingredients,
 } = recipe.data;
+
+const categoryIcons: Record<string, string> = {
+  antipasto: '🥖',
+  primo: '🍝',
+  secondo: '🥘',
+  contorno: '🥗',
+  dolce: '🍰',
+};
 ---
 
-<Layout title={title}>
-
+<Layout title={title} description={description}>
   <article class="recipe-page">
+    <div class="recipe-top-nav">
+      <a href="/" class="recipe-back">
+        <span class="recipe-back__arrow" aria-hidden="true">←</span>
+        <span>Tutte le ricette</span>
+      </a>
 
-    <a href="/" class="back-link">
-      ← Tutte le ricette
-    </a>
-
-    {image && (
-      <img
-        src={image}
-        alt={title}
-        class="recipe-hero-image"
-      />
-    )}
+      <button
+        type="button"
+        class="recipe-print-btn"
+        onclick="window.print()"
+        aria-label="Stampa questa ricetta"
+      >
+        <span aria-hidden="true">🖨️</span>
+        <span>Stampa</span>
+      </button>
+    </div>
 
     <header class="recipe-header">
-
-      <span class="category">
-        {category}
+      <span class={`recipe-category recipe-category--${category}`}>
+        {categoryIcons[category] || '🍴'} {category}
       </span>
 
-      <h1>{title}</h1>
+      <h1 class="recipe-title">{title}</h1>
 
       {description && (
         <p class="recipe-description">
@@ -65,32 +75,65 @@ const {
       )}
 
       <div class="recipe-meta">
-
         {servings && (
-          <span>👥 {servings} persone</span>
+          <div class="recipe-meta__item">
+            <span class="recipe-meta__icon" aria-hidden="true">👥</span>
+            <div class="recipe-meta__details">
+              <span class="recipe-meta__label">Porzioni</span>
+              <span class="recipe-meta__value">{servings} persone</span>
+            </div>
+          </div>
         )}
 
         {prepTime && (
-          <span>🔪 {prepTime} min prep.</span>
+          <div class="recipe-meta__item">
+            <span class="recipe-meta__icon" aria-hidden="true">⏱️</span>
+            <div class="recipe-meta__details">
+              <span class="recipe-meta__label">Preparazione</span>
+              <span class="recipe-meta__value">{prepTime} min</span>
+            </div>
+          </div>
         )}
 
-        {cookTime && (
-          <span>🔥 {cookTime} min cottura</span>
+        {cookTime !== undefined && (
+          <div class="recipe-meta__item">
+            <span class="recipe-meta__icon" aria-hidden="true">🔥</span>
+            <div class="recipe-meta__details">
+              <span class="recipe-meta__label">Cottura</span>
+              <span class="recipe-meta__value">{cookTime > 0 ? `${cookTime} min` : 'Nessuna'}</span>
+            </div>
+          </div>
         )}
 
         {difficulty && (
-          <span>📊 {difficulty}</span>
+          <div class="recipe-meta__item">
+            <span class="recipe-meta__icon" aria-hidden="true">📊</span>
+            <div class="recipe-meta__details">
+              <span class="recipe-meta__label">Difficoltà</span>
+              <span class="recipe-meta__value">{difficulty}</span>
+            </div>
+          </div>
         )}
-
       </div>
 
-      <div class="tags">
-        {tags.map((tag) => (
-          <span class="tag">{tag}</span>
-        ))}
-      </div>
-
+      {tags.length > 0 && (
+        <div class="recipe-tags">
+          {tags.map((tag) => (
+            <span class="recipe-tag">#{tag}</span>
+          ))}
+        </div>
+      )}
     </header>
+
+    {image && (
+      <div class="recipe-media">
+        <img
+          src={image}
+          alt={title}
+          class="recipe-hero-image"
+        />
+      </div>
+    )}
 
     <RecipeIngredients
       ingredients={ingredients}
@@ -101,6 +144,11 @@ const {
       <Content />
     </section>
 
+    <div class="recipe-footer-nav">
+      <a href="/" class="recipe-back">
+        <span class="recipe-back__arrow" aria-hidden="true">←</span>
+        <span>Torna a tutte le ricette</span>
+      </a>
+    </div>
   </article>
-
 </Layout>

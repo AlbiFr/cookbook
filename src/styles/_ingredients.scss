@@ -1,0 +1,283 @@
+@use "variables" as *;
+
+.recipe-ingredients {
+  margin-top: $space-7;
+  padding: $space-5;
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
+}
+
+.recipe-ingredients__header {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  padding-bottom: $space-5;
+  border-bottom: 1px solid $color-border-light;
+  margin-bottom: $space-4;
+}
+
+.recipe-ingredients__title-group {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+}
+
+.recipe-ingredients__title {
+  font-size: 1.85rem;
+  line-height: 1.1;
+  color: $color-text;
+}
+
+.recipe-ingredients__hint {
+  font-size: 0.8rem;
+  color: $color-muted;
+}
+
+.servings-control {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-3;
+  align-self: flex-start;
+}
+
+.servings-control__label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: $color-muted;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.servings-control__box {
+  display: inline-flex;
+  align-items: center;
+  background: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-full;
+  padding: 2px;
+}
+
+.servings-control__btn {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: $color-surface;
+  border-radius: $radius-full;
+  color: $color-text;
+  font-size: 1.1rem;
+  font-weight: 600;
+  box-shadow: $shadow-sm;
+  transition: all $transition-fast;
+
+  &:hover {
+    background: $color-primary;
+    color: $color-white;
+  }
+
+  &:active {
+    transform: scale(0.92);
+  }
+}
+
+.servings-control__value {
+  min-width: 2.25rem;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1rem;
+  color: $color-text;
+  font-variant-numeric: tabular-nums;
+}
+
+.ingredients-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ingredient {
+  border-bottom: 1px solid $color-border-light;
+  transition: opacity $transition-fast;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  &--checked {
+    opacity: 0.5;
+
+    .ingredient__text {
+      text-decoration: line-through;
+    }
+
+    .ingredient__check-custom {
+      background: $color-primary;
+      border-color: $color-primary;
+
+      svg {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  }
+}
+
+.ingredient__label {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-3 $space-2;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  user-select: none;
+  transition: background $transition-fast;
+
+  &:hover {
+    background: $color-primary-light;
+  }
+}
+
+.ingredient__checkbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ingredient__check-custom {
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1.5px solid $color-border;
+  border-radius: 4px;
+  background: $color-surface;
+  flex-shrink: 0;
+  transition: all $transition-fast;
+
+  svg {
+    width: 0.75rem;
+    height: 0.75rem;
+    color: $color-white;
+    opacity: 0;
+    transform: scale(0.7);
+    transition: all $transition-fast;
+  }
+}
+
+.ingredient__text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: $space-2;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: $color-text;
+  transition: text-decoration $transition-fast;
+}
+
+.ingredient__quantity {
+  font-weight: 600;
+  color: $color-primary-dark;
+  min-width: 4rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.ingredient__name {
+  color: $color-text;
+}
+
+.recipe-ingredients__footer {
+  margin-top: $space-5;
+  padding-top: $space-4;
+  border-top: 1px solid $color-border-light;
+}
+
+.copy-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  width: 100%;
+  padding: $space-3 $space-5;
+  border: 0;
+  border-radius: $radius-full;
+  background: $color-primary;
+  color: $color-white;
+  font-size: 0.92rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(182, 83, 60, 0.25);
+  transition: all $transition-fast;
+
+  &:hover {
+    background: $color-primary-dark;
+    box-shadow: 0 4px 12px rgba(182, 83, 60, 0.35);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &--success {
+    background: #2E7D32 !important;
+    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.3) !important;
+  }
+}
+
+@media (min-width: $breakpoint-tablet) {
+  .recipe-ingredients {
+    padding: $space-6;
+  }
+
+  .recipe-ingredients__header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .servings-control {
+    align-self: auto;
+  }
+
+  .ingredient__quantity {
+    min-width: 5.5rem;
+  }
+
+  .copy-button {
+    width: auto;
+  }
+}
+
+@media print {
+  .recipe-ingredients {
+    border: 1px solid #ddd;
+    box-shadow: none;
+    padding: 1rem 0;
+    margin-top: 1.5rem;
+  }
+
+  .recipe-ingredients__hint,
+  .recipe-ingredients__footer,
+  .servings-control__btn {
+    display: none !important;
+  }
+
+  .ingredient__label {
+    padding: 0.2rem 0;
+  }
+
+  .ingredient--checked {
+    opacity: 1 !important;
+    .ingredient__text {
+      text-decoration: none !important;
+    }
+  }
+
+  .ingredient__check-custom {
+    border: 1px solid #888;
+  }
+}

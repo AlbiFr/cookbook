@@ -1,0 +1,99 @@
+// --------------------------------
+// Colors
+// --------------------------------
+
+$color-background: #F7F3ED;
+$color-surface: #FFFDF9;
+$color-surface-hover: #FFFFFF;
+
+$color-text: #292722;
+$color-text-secondary: #575249;
+$color-muted: #817A70;
+$color-muted-light: #B8B0A2;
+
+$color-primary: #B6533C;
+$color-primary-dark: #8F3E2E;
+$color-primary-light: #FBF0ED;
+$color-primary-subtle: rgba(182, 83, 60, 0.08);
+
+$color-accent: #D49A45;
+$color-accent-light: #FBF4E8;
+
+$color-border: #E5DED3;
+$color-border-light: #F0ECE4;
+$color-border-focus: #B6533C;
+
+$color-white: #FFFFFF;
+
+// Category Badge Color Palette
+$category-colors: (
+  'antipasto': (bg: #F4EBE1, text: #8C5428, border: #E4D5C5),
+  'primo': (bg: #F8EFE4, text: #A34E26, border: #EED7C2),
+  'secondo': (bg: #FCEEEC, text: #B6533C, border: #F3CEC8),
+  'contorno': (bg: #EDF3EB, text: #3B6B38, border: #CCE0C9),
+  'dolce': (bg: #F9EAF2, text: #9B3B6D, border: #EFCEDF),
+);
+
+// --------------------------------
+// Typography
+// --------------------------------
+
+$font-display: "DM Serif Display", Georgia, serif;
+$font-body: "Inter", system-ui, -apple-system, sans-serif;
+
+// --------------------------------
+// Spacing
+// --------------------------------
+
+$space-1: 0.25rem;
+$space-2: 0.5rem;
+$space-3: 0.75rem;
+$space-4: 1rem;
+$space-5: 1.5rem;
+$space-6: 2rem;
+$space-7: 3rem;
+$space-8: 4rem;
+$space-9: 6rem;
+
+// --------------------------------
+// Radius
+// --------------------------------
+
+$radius-sm: 8px;
+$radius-md: 14px;
+$radius-lg: 20px;
+$radius-xl: 28px;
+$radius-full: 9999px;
+
+// --------------------------------
+// Shadows
+// --------------------------------
+
+$shadow-sm: 0 1px 3px rgba(41, 39, 34, 0.05);
+$shadow-card:
+  0 2px 8px rgba(41, 39, 34, 0.04),
+  0 12px 30px rgba(41, 39, 34, 0.06);
+$shadow-hover:
+  0 6px 16px rgba(41, 39, 34, 0.06),
+  0 20px 40px rgba(41, 39, 34, 0.09);
+$shadow-pop: 0 10px 25px -5px rgba(182, 83, 60, 0.2);
+
+// --------------------------------
+// Layout
+// --------------------------------
+
+$max-width: 1200px;
+
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+$breakpoint-wide: 1280px;
+
+// --------------------------------
+// Transitions
+// --------------------------------
+
+$transition-fast: 150ms ease;
+$transition-normal: 180ms ease;
+$transition-base: 220ms cubic-bezier(0.2, 0, 0, 1);
+$transition-slow: 250ms ease;

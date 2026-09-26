@@ -13,6 +13,14 @@ const categories = [
   'dolce',
 ];
 
+const categoryConfig: Record<string, { label: string; icon: string }> = {
+  antipasto: { label: 'Antipasti', icon: '🥖' },
+  primo: { label: 'Primi', icon: '🍝' },
+  secondo: { label: 'Secondi', icon: '🥘' },
+  contorno: { label: 'Contorni', icon: '🥗' },
+  dolce: { label: 'Dolci', icon: '🍰' },
+};
+
 const tags = [
   ...new Set(
     recipes.flatMap((recipe) => recipe.data.tags)
@@ -20,91 +28,140 @@ const tags = [
 ].sort();
 ---
 
-<Layout title="Ricette">
-
+<Layout title="Le Nostre Ricette">
   <section class="hero">
+    <div class="hero__badge">
+      <span class="hero__badge-icon" aria-hidden="true">🍳</span>
+      <span>Ricettario di Casa</span>
+      <span class="hero__badge-dot">·</span>
+      <span>{recipes.length} {recipes.length === 1 ? 'ricetta' : 'ricette'}</span>
+    </div>
 
-    <h1>Le nostre ricette</h1>
+    <h1 class="hero__title">Cosa cuciniamo oggi?</h1>
 
-    <p>
-      Tutto quello che cuciniamo e che vogliamo ricordare.
+    <p class="hero__description">
+      Tutti i nostri piatti del cuore, collaudati e trascritti per essere rifatti ogni volta che vogliamo.
     </p>
-
   </section>
 
-  <section class="recipe-browser">
-
+  <section class="recipe-browser" aria-label="Cerca e filtra le ricette">
+    <!-- Search Bar -->
     <div class="search-container">
-      <input
-        id="search"
-        type="search"
-        placeholder="🔍 Cerca una ricetta..."
-        aria-label="Cerca una ricetta"
-      />
+      <div class="search-box">
+        <span class="search-icon" aria-hidden="true">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+        <input
+          id="search"
+          class="search-input"
+          type="search"
+          placeholder="Cerca per titolo, ingrediente o tag (es. melanzane, facile)..."
+          aria-label="Cerca una ricetta"
+          autocomplete="off"
+        />
+        <kbd class="search-kbd" title="Premi / per cercare">/</kbd>
+        <button
+          id="clear-search"
+          class="search-clear hidden"
+          type="button"
+          aria-label="Cancella testo di ricerca"
+        >
+          ✕
+        </button>
+      </div>
     </div>
 
-    <div class="filters">
-
-      <div class="filter-group">
-
-        <span>Categoria</span>
-
-        <div class="filter-buttons">
-
+    <!-- Filters Section -->
+    <div class="filters-card">
+      <!-- Portate (Categories) -->
+      <div class="filter-row">
+        <span class="filter-row__label">
+          <span class="filter-row__icon" aria-hidden="true">🍽️</span>
+          Portata
+        </span>
+        <div class="filter-chips">
           <button
-            class="filter-button active"
+            class="filter-chip filter-chip--category active"
             data-category="all"
+            type="button"
           >
-            Tutte
+            <span class="filter-chip__icon" aria-hidden="true">✨</span>
+            <span class="filter-chip__label">Tutte</span>
+            <span class="filter-chip__count">{recipes.length}</span>
           </button>
 
-          {categories.map((category) => (
-            <button
-              class="filter-button"
-              data-category={category}
-            >
-              {category}
-            </button>
-          ))}
-
+          {categories.map((category) => {
+            const count = recipes.filter((r) => r.data.category === category).length;
+            if (count === 0) return null;
+            const config = categoryConfig[category] || { label: category, icon: '🍴' };
+            return (
+              <button
+                class="filter-chip filter-chip--category"
+                data-category={category}
+                type="button"
+              >
+                <span class="filter-chip__icon" aria-hidden="true">{config.icon}</span>
+                <span class="filter-chip__label">{config.label}</span>
+                <span class="filter-chip__count">{count}</span>
+              </button>
+            );
+          })}
         </div>
-
       </div>
 
-      <div class="filter-group">
-
-        <span>Tag</span>
-
-        <div class="filter-buttons">
-
-          {tags.map((tag) => (
-            <button
-              class="filter-button"
-              data-tag={tag}
-            >
-              {tag}
-            </button>
-          ))}
-
+      <!-- Tag (Tags) -->
+      {tags.length > 0 && (
+        <div class="filter-row filter-row--tags">
+          <span class="filter-row__label">
+            <span class="filter-row__icon" aria-hidden="true">🏷️</span>
+            Tag
+          </span>
+          <div class="filter-chips">
+            {tags.map((tag) => (
+              <button
+                class="filter-chip filter-chip--tag"
+                data-tag={tag}
+                type="button"
+              >
+                #{tag}
+              </button>
+            ))}
+          </div>
         </div>
+      )}
 
+      <!-- Active summary bar -->
+      <div id="filter-status" class="filter-status hidden">
+        <span id="filter-status-text" class="filter-status__text"></span>
+        <button id="reset-filters" class="filter-status__reset" type="button">
+          Azzera tutti i filtri ✕
+        </button>
       </div>
-
     </div>
 
+    <!-- Recipe Grid -->
     <div id="recipe-grid" class="recipe-grid">
-
       {recipes.map((recipe) => (
         <div
           class="recipe-wrapper"
           data-title={recipe.data.title.toLowerCase()}
-          data-description={
-            recipe.data.description?.toLowerCase() ?? ''
-          }
+          data-description={recipe.data.description?.toLowerCase() ?? ''}
           data-category={recipe.data.category}
           data-tags={recipe.data.tags.join('|')}
+          data-ingredients={recipe.data.ingredients.map(i => i.item.toLowerCase()).join(' ')}
         >
-
           <RecipeCard
             slug={recipe.id}
             title={recipe.data.title}
@@ -112,61 +169,66 @@ const tags = [
             category={recipe.data.category}
             tags={recipe.data.tags}
             image={recipe.data.image}
+            prepTime={recipe.data.prepTime}
+            cookTime={recipe.data.cookTime}
+            difficulty={recipe.data.difficulty}
           />
-
         </div>
       ))}
-
     </div>
 
-    <p id="no-results" class="no-results hidden">
-      Nessuna ricetta trovata.
-    </p>
-
+    <!-- Empty State -->
+    <div id="no-results" class="no-results hidden">
+      <span class="no-results__icon" aria-hidden="true">🥣</span>
+      <h2 class="no-results__title">Nessuna ricetta trovata</h2>
+      <p class="no-results__text">
+        Non abbiamo trovato ricette che corrispondono ai filtri o alla ricerca selezionata.
+      </p>
+      <button id="reset-no-results" class="no-results__reset" type="button">
+        Reimposta tutti i filtri
+      </button>
+    </div>
   </section>
-
 </Layout>
 
 <script>
-  const searchInput =
-    document.querySelector('#search');
+  const searchInput = document.querySelector<HTMLInputElement>('#search');
+  const clearSearchBtn = document.querySelector<HTMLButtonElement>('#clear-search');
+  const recipeWrappers = document.querySelectorAll<HTMLElement>('.recipe-wrapper');
+  const categoryChips = document.querySelectorAll<HTMLButtonElement>('.filter-chip--category');
+  const tagChips = document.querySelectorAll<HTMLButtonElement>('.filter-chip--tag');
+  const noResults = document.querySelector<HTMLElement>('#no-results');
+  const resetFiltersBtn = document.querySelector<HTMLButtonElement>('#reset-filters');
+  const resetNoResultsBtn = document.querySelector<HTMLButtonElement>('#reset-no-results');
+  const filterStatus = document.querySelector<HTMLElement>('#filter-status');
+  const filterStatusText = document.querySelector<HTMLElement>('#filter-status-text');
 
-  const recipeWrappers =
-    document.querySelectorAll('.recipe-wrapper');
-
-  const filterButtons =
-    document.querySelectorAll('.filter-button');
-
-  const noResults =
-    document.querySelector('#no-results');
-
+  const totalRecipesCount = recipeWrappers.length;
   let selectedCategory = 'all';
-  let selectedTag = null;
+  let selectedTag: string | null = null;
 
   function updateRecipes() {
-    const search =
-      searchInput?.value.toLowerCase().trim() ?? '';
+    const search = searchInput?.value.toLowerCase().trim() ?? '';
+
+    if (clearSearchBtn) {
+      clearSearchBtn.classList.toggle('hidden', search.length === 0);
+    }
 
     let visibleCount = 0;
 
     recipeWrappers.forEach((recipe) => {
-      const title =
-        recipe.getAttribute('data-title') ?? '';
-
-      const description =
-        recipe.getAttribute('data-description') ?? '';
-
-      const category =
-        recipe.getAttribute('data-category') ?? '';
-
-      const tags =
-        recipe.getAttribute('data-tags') ?? '';
+      const title = recipe.getAttribute('data-title') ?? '';
+      const description = recipe.getAttribute('data-description') ?? '';
+      const category = recipe.getAttribute('data-category') ?? '';
+      const tags = recipe.getAttribute('data-tags') ?? '';
+      const ingredients = recipe.getAttribute('data-ingredients') ?? '';
 
       const matchesSearch =
         !search ||
         title.includes(search) ||
         description.includes(search) ||
-        tags.includes(search);
+        tags.toLowerCase().includes(search) ||
+        ingredients.includes(search);
 
       const matchesCategory =
         selectedCategory === 'all' ||
@@ -176,10 +238,7 @@ const tags = [
         !selectedTag ||
         tags.split('|').includes(selectedTag);
 
-      const visible =
-        matchesSearch &&
-        matchesCategory &&
-        matchesTag;
+      const visible = matchesSearch && matchesCategory && matchesTag;
 
       recipe.classList.toggle('hidden', !visible);
 
@@ -188,52 +247,80 @@ const tags = [
       }
     });
 
-    noResults?.classList.toggle(
-      'hidden',
-      visibleCount > 0
-    );
+    noResults?.classList.toggle('hidden', visibleCount > 0);
+
+    // Update filter status bar
+    const hasActiveFilters = Boolean(search || selectedCategory !== 'all' || selectedTag);
+    if (filterStatus && filterStatusText) {
+      filterStatus.classList.toggle('hidden', !hasActiveFilters);
+      if (hasActiveFilters) {
+        filterStatusText.textContent = `Mostrando ${visibleCount} di ${totalRecipesCount} ricette`;
+      }
+    }
   }
 
-  searchInput?.addEventListener(
-    'input',
-    updateRecipes
-  );
+  function resetAll() {
+    if (searchInput) {
+      searchInput.value = '';
+    }
+    selectedCategory = 'all';
+    selectedTag = null;
 
-  filterButtons.forEach((button) => {
-    button.addEventListener('click', () => {
+    categoryChips.forEach((btn) => {
+      btn.classList.toggle('active', btn.getAttribute('data-category') === 'all');
+    });
 
-      const category =
-        button.getAttribute('data-category');
+    tagChips.forEach((btn) => {
+      btn.classList.remove('active');
+    });
 
-      const tag =
-        button.getAttribute('data-tag');
+    updateRecipes();
+  }
 
-      if (category) {
-        selectedCategory =
-          category === 'all' ? 'all' : category;
-
-        filterButtons.forEach((b) => {
-          if (b.hasAttribute('data-category')) {
-            b.classList.remove('active');
-          }
-        });
-
-        button.classList.add('active');
+  // Keyboard shortcut: '/' focuses search input
+  window.addEventListener('keydown', (e) => {
+    if (e.key === '/' && document.activeElement !== searchInput) {
+      const activeTag = document.activeElement?.tagName.toLowerCase();
+      if (activeTag !== 'input' && activeTag !== 'textarea') {
+        e.preventDefault();
+        searchInput?.focus();
       }
+    }
+  });
 
-      if (tag) {
-        selectedTag =
-          selectedTag === tag ? null : tag;
+  searchInput?.addEventListener('input', updateRecipes);
 
-        filterButtons.forEach((b) => {
-          if (b.hasAttribute('data-tag')) {
-            b.classList.remove('active');
-          }
-        });
+  clearSearchBtn?.addEventListener('click', () => {
+    if (searchInput) {
+      searchInput.value = '';
+      searchInput.focus();
+      updateRecipes();
+    }
+  });
 
-        if (selectedTag) {
-          button.classList.add('active');
-        }
+  resetFiltersBtn?.addEventListener('click', resetAll);
+  resetNoResultsBtn?.addEventListener('click', resetAll);
+
+  categoryChips.forEach((button) => {
+    button.addEventListener('click', () => {
+      const category = button.getAttribute('data-category') ?? 'all';
+      selectedCategory = category;
+
+      categoryChips.forEach((b) => b.classList.remove('active'));
+      button.classList.add('active');
+
+      updateRecipes();
+    });
+  });
+
+  tagChips.forEach((button) => {
+    button.addEventListener('click', () => {
+      const tag = button.getAttribute('data-tag');
+      selectedTag = selectedTag === tag ? null : tag;
+
+      tagChips.forEach((b) => b.classList.remove('active'));
+      if (selectedTag) {
+        button.classList.add('active');
       }
 
       updateRecipes();

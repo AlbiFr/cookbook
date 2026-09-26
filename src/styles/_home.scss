@@ -1,0 +1,429 @@
+@use "variables" as *;
+
+.hero {
+  text-align: center;
+  max-width: 680px;
+  margin-inline: auto;
+  margin-bottom: $space-7;
+}
+
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: 0.35rem 0.9rem;
+  margin-bottom: $space-4;
+  background: $color-primary-light;
+  color: $color-primary;
+  border: 1px solid rgba(182, 83, 60, 0.22);
+  border-radius: $radius-full;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  box-shadow: 0 1px 3px rgba(182, 83, 60, 0.08);
+}
+
+.hero__badge-icon {
+  font-size: 1rem;
+}
+
+.hero__badge-dot {
+  opacity: 0.5;
+}
+
+.hero__title {
+  font-size: clamp(2.4rem, 6vw, 3.75rem);
+  font-weight: 400;
+  line-height: 1.05;
+  color: $color-text;
+  letter-spacing: -0.03em;
+  margin-bottom: $space-3;
+}
+
+.hero__description {
+  color: $color-muted;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 580px;
+  margin-inline: auto;
+}
+
+.recipe-browser {
+  margin-top: $space-5;
+}
+
+// --------------------------------
+// Search Bar
+// --------------------------------
+
+.search-container {
+  max-width: 620px;
+  margin-inline: auto;
+  margin-bottom: $space-5;
+}
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 3.35rem;
+  background: $color-surface;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-full;
+  padding-inline: 1.15rem 0.85rem;
+  box-shadow:
+    0 2px 6px rgba(41, 39, 34, 0.04),
+    0 8px 20px rgba(41, 39, 34, 0.03);
+  transition:
+    border-color $transition-fast,
+    box-shadow $transition-fast,
+    transform $transition-fast,
+    background $transition-fast;
+
+  &:hover {
+    border-color: rgba(182, 83, 60, 0.4);
+    background: $color-surface-hover;
+  }
+
+  &:focus-within {
+    border-color: $color-primary;
+    background: $color-surface-hover;
+    box-shadow:
+      0 0 0 4px rgba(182, 83, 60, 0.14),
+      0 8px 24px rgba(41, 39, 34, 0.07);
+    transform: translateY(-1px);
+
+    .search-icon {
+      color: $color-primary;
+    }
+
+    .search-kbd {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+}
+
+.search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: $color-muted;
+  margin-right: 0.85rem;
+  flex-shrink: 0;
+  transition: color $transition-fast;
+
+  svg {
+    width: 20px !important;
+    height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+    display: block;
+  }
+}
+
+.search-input {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: $color-text;
+  font-size: 0.98rem;
+  padding-block: 0.5rem;
+
+  &::placeholder {
+    color: $color-muted-light;
+    font-weight: 400;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-webkit-search-cancel-button {
+    display: none;
+  }
+}
+
+.search-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 6px;
+  background: $color-background;
+  border: 1px solid $color-border;
+  color: $color-muted;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-right: 0.4rem;
+  user-select: none;
+  transition: opacity $transition-fast;
+}
+
+.search-clear {
+  display: grid;
+  place-items: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: $radius-full;
+  background: $color-border;
+  color: $color-text-secondary;
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    background: $color-primary;
+    color: $color-white;
+    transform: scale(1.08);
+  }
+}
+
+// --------------------------------
+// Filter Section
+// --------------------------------
+
+.filters-card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  margin-bottom: $space-7;
+  padding: $space-5;
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
+}
+
+.filter-row {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+
+  &--tags {
+    padding-top: $space-3;
+    border-top: 1px dashed $color-border-light;
+  }
+}
+
+.filter-row__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: $color-muted;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.filter-row__icon {
+  font-size: 0.9rem;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.42rem 0.9rem;
+  border: 1px solid $color-border;
+  border-radius: $radius-full;
+  background: $color-background;
+  color: $color-text-secondary;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background $transition-fast,
+    border-color $transition-fast,
+    color $transition-fast,
+    transform $transition-fast,
+    box-shadow $transition-fast;
+
+  &:hover {
+    border-color: $color-primary;
+    color: $color-primary;
+    background: $color-primary-light;
+    transform: translateY(-1px);
+  }
+
+  &.active {
+    background: $color-primary;
+    border-color: $color-primary;
+    color: $color-white;
+    font-weight: 600;
+    box-shadow: 0 3px 10px rgba(182, 83, 60, 0.28);
+    transform: translateY(-1px);
+
+    .filter-chip__count {
+      background: rgba(255, 255, 255, 0.22);
+      color: $color-white;
+    }
+  }
+}
+
+.filter-chip__icon {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.filter-chip__label {
+  line-height: 1;
+}
+
+.filter-chip__count {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: $radius-full;
+  background: rgba(41, 39, 34, 0.07);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.1;
+  transition: all $transition-fast;
+}
+
+.filter-chip--tag {
+  font-size: 0.78rem;
+  padding: 0.3rem 0.75rem;
+  background: $color-surface;
+  border-color: $color-border-light;
+  color: $color-muted;
+
+  &:hover {
+    border-color: $color-accent;
+    color: #8C5428;
+    background: $color-accent-light;
+  }
+
+  &.active {
+    background: $color-primary-light;
+    border-color: $color-primary;
+    color: $color-primary-dark;
+    box-shadow: none;
+  }
+}
+
+.filter-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: $space-3;
+  border-top: 1px dashed $color-border;
+  font-size: 0.84rem;
+  color: $color-muted;
+}
+
+.filter-status__reset {
+  background: none;
+  border: none;
+  color: $color-primary;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  border-radius: $radius-sm;
+  transition: background $transition-fast;
+
+  &:hover {
+    background: $color-primary-light;
+    text-decoration: underline;
+  }
+}
+
+// --------------------------------
+// Empty State
+// --------------------------------
+
+.no-results {
+  text-align: center;
+  padding: $space-8 $space-4;
+  background: $color-surface;
+  border: 1.5px dashed $color-border;
+  border-radius: $radius-xl;
+  margin-block: $space-6;
+  box-shadow: $shadow-sm;
+}
+
+.no-results__icon {
+  font-size: 3.25rem;
+  display: block;
+  margin-bottom: $space-3;
+}
+
+.no-results__title {
+  font-size: 1.6rem;
+  font-family: $font-display;
+  margin-bottom: $space-2;
+  color: $color-text;
+}
+
+.no-results__text {
+  color: $color-muted;
+  font-size: 0.95rem;
+  max-width: 440px;
+  margin-inline: auto;
+  margin-bottom: $space-5;
+}
+
+.no-results__reset {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: 0.65rem 1.4rem;
+  background: $color-primary;
+  color: $color-white;
+  border-radius: $radius-full;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 3px 10px rgba(182, 83, 60, 0.25);
+  transition: all $transition-fast;
+
+  &:hover {
+    background: $color-primary-dark;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px rgba(182, 83, 60, 0.35);
+  }
+}
+
+.recipe-wrapper {
+  transition: opacity $transition-fast, transform $transition-fast;
+
+  &.hidden {
+    display: none !important;
+  }
+}
+
+@media (min-width: $breakpoint-tablet) {
+  .hero {
+    margin-bottom: $space-8;
+  }
+
+  .filters-card {
+    padding: $space-5 $space-6;
+    gap: $space-4;
+  }
+
+  .filter-row {
+    flex-direction: row;
+    align-items: center;
+    gap: $space-4;
+  }
+
+  .filter-row__label {
+    min-width: 90px;
+    flex-shrink: 0;
+  }
+}

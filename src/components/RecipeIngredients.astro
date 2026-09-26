@@ -1,0 +1,190 @@
+---
+interface Ingredient {
+  quantity?: number;
+  unit?: string;
+  item: string;
+}
+
+interface Props {
+  ingredients: Ingredient[];
+  servings: number;
+}
+
+const { ingredients, servings } = Astro.props;
+---
+
+<section class="recipe-ingredients" aria-labelledby="ingredients-heading">
+  <div class="recipe-ingredients__header">
+    <div class="recipe-ingredients__title-group">
+      <h2 id="ingredients-heading" class="recipe-ingredients__title">Ingredienti</h2>
+      <span class="recipe-ingredients__hint">Tocca un ingrediente per spuntarlo mentre cucini</span>
+    </div>
+
+    <div class="servings-control">
+      <span class="servings-control__label">Porzioni</span>
+      <div class="servings-control__box">
+        <button
+          id="decrease-servings"
+          type="button"
+          aria-label="Riduci porzioni"
+          class="servings-control__btn"
+        >
+          −
+        </button>
+        <span id="servings-value" class="servings-control__value">{servings}</span>
+        <button
+          id="increase-servings"
+          type="button"
+          aria-label="Aumenta porzioni"
+          class="servings-control__btn"
+        >
+          +
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ul id="ingredients-list" class="ingredients-list">
+    {ingredients.map((ingredient, index) => (
+      <li
+        class="ingredient"
+        data-quantity={ingredient.quantity ?? ''}
+        data-unit={ingredient.unit ?? ''}
+        data-item={ingredient.item}
+        data-index={index}
+      >
+        <label class="ingredient__label">
+          <input
+            type="checkbox"
+            class="ingredient__checkbox"
+            aria-label={`Spunta ${ingredient.item}`}
+          />
+          <span class="ingredient__check-custom" aria-hidden="true">
+            <svg viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1.5 5 4.5 8 10.5 1.5"></polyline>
+            </svg>
+          </span>
+          <span class="ingredient__text">
+            <span class="ingredient__quantity">
+              {ingredient.quantity ?? ''}
+              {ingredient.unit ? ` ${ingredient.unit}` : ''}
+            </span>
+            <span class="ingredient__name">{ingredient.item}</span>
+          </span>
+        </label>
+      </li>
+    ))}
+  </ul>
+
+  <div class="recipe-ingredients__footer">
+    <button id="copy-ingredients" class="copy-button" type="button">
+      <span class="copy-button__icon" aria-hidden="true">📋</span>
+      <span class="copy-button__text">Copia lista per la spesa</span>
+    </button>
+  </div>
+</section>
+
+<script define:vars={{ originalServings: servings }}>
+  let currentServings = originalServings;
+
+  const servingsValue = document.querySelector('#servings-value');
+  const ingredientsList = document.querySelector('#ingredients-list');
+  const decreaseButton = document.querySelector('#decrease-servings');
+  const increaseButton = document.querySelector('#increase-servings');
+  const copyButton = document.querySelector('#copy-ingredients');
+
+  function formatQuantity(value) {
+    if (Number.isInteger(value)) {
+      return value.toString();
+    }
+    // Round to 2 decimal places and remove trailing zeros
+    const rounded = Math.round(value * 100) / 100;
+    return rounded.toString().replace('.', ',');
+  }
+
+  function updateIngredients() {
+    if (!servingsValue || !ingredientsList) return;
+
+    servingsValue.textContent = currentServings;
+
+    const ingredients = ingredientsList.querySelectorAll('.ingredient');
+
+    ingredients.forEach((ingredient) => {
+      const quantity = ingredient.getAttribute('data-quantity');
+      const unit = ingredient.getAttribute('data-unit') || '';
+      const quantityElement = ingredient.querySelector('.ingredient__quantity');
+
+      if (!quantityElement) return;
+
+      if (!quantity || isNaN(Number(quantity))) {
+        quantityElement.textContent = unit ? unit : '';
+        return;
+      }
+
+      const originalQuantity = Number(quantity);
+      const newQuantity = (originalQuantity * currentServings) / originalServings;
+
+      quantityElement.textContent = `${formatQuantity(newQuantity)}${unit ? ` ${unit}` : ''}`;
+    });
+  }
+
+  decreaseButton?.addEventListener('click', () => {
+    if (currentServings > 1) {
+      currentServings -= 1;
+      updateIngredients();
+    }
+  });
+
+  increaseButton?.addEventListener('click', () => {
+    if (currentServings < 50) {
+      currentServings += 1;
+      updateIngredients();
+    }
+  });
+
+  // Checkbox state toggle
+  ingredientsList?.querySelectorAll('.ingredient__checkbox').forEach((checkbox) => {
+    checkbox.addEventListener('change', (e) => {
+      const item = (e.target).closest('.ingredient');
+      item?.classList.toggle('ingredient--checked', (e.target).checked);
+    });
+  });
+
+  // Copy to clipboard
+  copyButton?.addEventListener('click', async () => {
+    if (!ingredientsList) return;
+
+    const items = ingredientsList.querySelectorAll('.ingredient');
+    const lines = [];
+
+    items.forEach((item) => {
+      const qty = item.querySelector('.ingredient__quantity')?.textContent?.trim() ?? '';
+      const name = item.querySelector('.ingredient__name')?.textContent?.trim() ?? '';
+      lines.push(qty ? `- ${qty} ${name}` : `- ${name}`);
+    });
+
+    const textToCopy = `🛒 Ingredienti per ${currentServings} persone:\n\n${lines.join('\n')}`;
+
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+
+      if (copyButton) {
+        const textSpan = copyButton.querySelector('.copy-button__text');
+        const iconSpan = copyButton.querySelector('.copy-button__icon');
+        const originalText = textSpan ? textSpan.textContent : '';
+
+        if (textSpan) textSpan.textContent = 'Lista copiata negli appunti!';
+        if (iconSpan) iconSpan.textContent = '✓';
+        copyButton.classList.add('copy-button--success');
+
+        setTimeout(() => {
+          if (textSpan) textSpan.textContent = originalText;
+          if (iconSpan) iconSpan.textContent = '📋';
+          copyButton.classList.remove('copy-button--success');
+        }, 2200);
+      }
+    } catch {
+      alert('Impossibile copiare gli ingredienti automaticamente.');
+    }
+  });
+</script>

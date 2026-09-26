@@ -1,25 +1,30 @@
 ---
-import '../styles/global.css';
+import '../styles/global.scss';
 
 interface Props {
   title?: string;
+  description?: string;
 }
 
-const { title = 'Our Recipes' } = Astro.props;
+const {
+  title = 'Le Nostre Ricette',
+  description = 'Il nostro ricettario di casa: piatti provati, collaudati e amati.',
+} = Astro.props;
 ---
 
 <!doctype html>
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
 
-    <meta
-      name="description"
-      content="Il nostro ricettario personale."
+    <!-- Google Fonts: DM Serif Display & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
     />
 
     <title>{title} · Our Recipes</title>
@@ -27,21 +32,33 @@ const { title = 'Our Recipes' } = Astro.props;
 
   <body>
     <header class="site-header">
-      <a href="/" class="site-title">
-        🍝 Our Recipes
-      </a>
+      <div class="container site-header__inner">
+        <a href="/" class="site-logo">
+          <span class="site-logo__icon" aria-hidden="true">🍳</span>
+          <span class="site-logo__text">Our Recipes</span>
+        </a>
 
-      <nav>
-        <a href="/">Ricette</a>
-      </nav>
+        <nav class="site-nav" aria-label="Navigazione principale">
+          <a href="/" class="site-nav__link">Tutte le Ricette</a>
+        </nav>
+      </div>
     </header>
 
-    <main>
+    <main class="site-main container">
       <slot />
     </main>
 
-    <footer>
-      <p>Our Recipes ❤️</p>
+    <footer class="site-footer">
+      <div class="container site-footer__inner">
+        <p class="site-footer__brand">
+          <span class="site-footer__title">Our Recipes</span>
+          <span class="site-footer__bullet">·</span>
+          <span>Il nostro ricettario di casa</span>
+        </p>
+        <p class="site-footer__meta">
+          Fatto con cura &amp; passione ❤️
+        </p>
+      </div>
     </footer>
   </body>
 </html>

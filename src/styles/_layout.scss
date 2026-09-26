@@ -1,0 +1,143 @@
+@use "variables" as *;
+
+.container {
+  width: min(calc(100% - 2rem), $max-width);
+  margin-inline: auto;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(247, 243, 237, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid $color-border;
+  padding-block: $space-4;
+  transition: border-color $transition-fast;
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-4;
+}
+
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  font-family: $font-display;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: $color-text;
+  letter-spacing: -0.01em;
+
+  .site-logo__icon {
+    font-size: 1.4rem;
+    transition: transform $transition-fast;
+  }
+
+  &:hover {
+    color: $color-primary;
+
+    .site-logo__icon {
+      transform: rotate(12deg) scale(1.1);
+    }
+  }
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+}
+
+.site-nav__link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $color-text-secondary;
+  padding: $space-2 $space-3;
+  border-radius: $radius-full;
+  transition: all $transition-fast;
+
+  &:hover {
+    color: $color-primary;
+    background: $color-primary-light;
+  }
+}
+
+.site-main {
+  flex: 1;
+  padding-block: $space-6 $space-9;
+}
+
+.site-footer {
+  border-top: 1px solid $color-border;
+  background: $color-surface;
+  padding-block: $space-6;
+  margin-top: auto;
+  color: $color-muted;
+  font-size: 0.85rem;
+}
+
+.site-footer__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-2;
+  text-align: center;
+}
+
+.site-footer__brand {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.site-footer__title {
+  font-family: $font-display;
+  font-size: 1.05rem;
+  color: $color-text;
+}
+
+.site-footer__bullet {
+  color: $color-muted-light;
+}
+
+.site-footer__meta {
+  font-size: 0.8rem;
+  color: $color-muted;
+}
+
+@media (min-width: $breakpoint-tablet) {
+  .container {
+    width: min(calc(100% - 4rem), $max-width);
+  }
+
+  .site-header {
+    padding-block: $space-4;
+  }
+
+  .site-main {
+    padding-block: $space-7 $space-9;
+  }
+
+  .site-footer__inner {
+    flex-direction: row;
+    text-align: left;
+  }
+}
+
+@media print {
+  .site-header,
+  .site-footer {
+    display: none !important;
+  }
+
+  .site-main {
+    padding: 0 !important;
+  }
+}
