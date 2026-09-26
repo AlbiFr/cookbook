@@ -1,0 +1,106 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import RecipeIngredients from '../../components/RecipeIngredients.astro';
+
+export async function getStaticPaths() {
+  const recipes = await getCollection('recipes');
+
+  return recipes.map((recipe) => ({
+    params: {
+      slug: recipe.id,
+    },
+    props: {
+      recipe,
+    },
+  }));
+}
+
+const { recipe } = Astro.props;
+
+const { Content } = await render(recipe);
+
+const {
+  title,
+  description,
+  category,
+  tags,
+  servings,
+  prepTime,
+  cookTime,
+  difficulty,
+  image,
+  ingredients,
+} = recipe.data;
+---
+
+<Layout title={title}>
+
+  <article class="recipe-page">
+
+    <a href="/" class="back-link">
+      ← Tutte le ricette
+    </a>
+
+    {image && (
+      <img
+        src={image}
+        alt={title}
+        class="recipe-hero-image"
+      />
+    )}
+
+    <header class="recipe-header">
+
+      <span class="category">
+        {category}
+      </span>
+
+      <h1>{title}</h1>
+
+      {description && (
+        <p class="recipe-description">
+          {description}
+        </p>
+      )}
+
+      <div class="recipe-meta">
+
+        {servings && (
+          <span>👥 {servings} persone</span>
+        )}
+
+        {prepTime && (
+          <span>🔪 {prepTime} min prep.</span>
+        )}
+
+        {cookTime && (
+          <span>🔥 {cookTime} min cottura</span>
+        )}
+
+        {difficulty && (
+          <span>📊 {difficulty}</span>
+        )}
+
+      </div>
+
+      <div class="tags">
+        {tags.map((tag) => (
+          <span class="tag">{tag}</span>
+        ))}
+      </div>
+
+    </header>
+
+    <RecipeIngredients
+      ingredients={ingredients}
+      servings={servings}
+    />
+
+    <section class="recipe-content">
+      <Content />
+    </section>
+
+  </article>
+
+</Layout>

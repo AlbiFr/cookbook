@@ -1,0 +1,56 @@
+---
+interface Props {
+  slug: string;
+  title: string;
+  description?: string;
+  category: string;
+  tags: string[];
+  image?: string;
+}
+
+const {
+  slug,
+  title,
+  description,
+  category,
+  tags,
+  image,
+} = Astro.props;
+---
+
+<a href={`/recipes/${slug}/`} class="recipe-card">
+
+  {image ? (
+    <img
+      src={image}
+      alt={title}
+      class="recipe-card-image"
+      loading="lazy"
+    />
+  ) : (
+    <div class="recipe-card-placeholder">
+      🍽️
+    </div>
+  )}
+
+  <div class="recipe-card-content">
+
+    <span class="category">
+      {category}
+    </span>
+
+    <h2>{title}</h2>
+
+    {description && (
+      <p>{description}</p>
+    )}
+
+    <div class="tags">
+      {tags.slice(0, 3).map((tag) => (
+        <span class="tag">{tag}</span>
+      ))}
+    </div>
+
+  </div>
+
+</a>

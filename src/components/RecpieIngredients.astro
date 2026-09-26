@@ -1,0 +1,148 @@
+---
+interface Ingredient {
+  quantity?: number;
+  unit?: string;
+  item: string;
+}
+
+interface Props {
+  ingredients: Ingredient[];
+  servings: number;
+}
+
+const { ingredients, servings } = Astro.props;
+---
+
+<section class="ingredients-section">
+
+  <div class="servings-control">
+
+    <span>Persone</span>
+
+    <div class="servings-buttons">
+      <button id="decrease-servings" aria-label="Diminuisci persone">
+        −
+      </button>
+
+      <strong id="servings-value">{servings}</strong>
+
+      <button id="increase-servings" aria-label="Aumenta persone">
+        +
+      </button>
+    </div>
+
+  </div>
+
+  <button id="copy-ingredients" class="copy-button">
+    📋 Copia ingredienti
+  </button>
+
+  <ul id="ingredients-list" class="ingredients-list">
+
+    {ingredients.map((ingredient, index) => (
+      <li
+        data-quantity={ingredient.quantity ?? ''}
+        data-unit={ingredient.unit ?? ''}
+        data-item={ingredient.item}
+        data-index={index}
+      >
+        <span class="ingredient-quantity">
+          {ingredient.quantity ?? ''}
+          {ingredient.unit ? ` ${ingredient.unit}` : ''}
+        </span>
+
+        <span>{ingredient.item}</span>
+      </li>
+    ))}
+
+  </ul>
+
+</section>
+
+<script define:vars={{ originalServings: servings }}>
+  let currentServings = originalServings;
+
+  const servingsValue = document.querySelector('#servings-value');
+  const ingredientsList = document.querySelector('#ingredients-list');
+  const decreaseButton = document.querySelector('#decrease-servings');
+  const increaseButton = document.querySelector('#increase-servings');
+  const copyButton = document.querySelector('#copy-ingredients');
+
+  function formatQuantity(value) {
+    if (Number.isInteger(value)) {
+      return value.toString();
+    }
+
+    return value
+      .toFixed(2)
+      .replace(/\.?0+$/, '');
+  }
+
+  function updateIngredients() {
+    if (!servingsValue || !ingredientsList) return;
+
+    servingsValue.textContent = currentServings;
+
+    const ingredients = ingredientsList.querySelectorAll('li');
+
+    ingredients.forEach((ingredient) => {
+      const quantity = ingredient.dataset.quantity;
+      const unit = ingredient.dataset.unit || '';
+      const quantityElement =
+        ingredient.querySelector('.ingredient-quantity');
+
+      if (!quantityElement) return;
+
+      if (!quantity) {
+        quantityElement.textContent = '';
+        return;
+      }
+
+      const originalQuantity = Number(quantity);
+      const newQuantity =
+        originalQuantity * currentServings / originalServings;
+
+      quantityElement.textContent =
+        `${formatQuantity(newQuantity)}${unit ? ` ${unit}` : ''}`;
+    });
+  }
+
+  decreaseButton?.addEventListener('click', () => {
+    if (currentServings > 1) {
+      currentServings -= 1;
+      updateIngredients();
+    }
+  });
+
+  increaseButton?.addEventListener('click', () => {
+    currentServings += 1;
+    updateIngredients();
+  });
+
+  copyButton?.addEventListener('click', async () => {
+    if (!ingredientsList) return;
+
+    const ingredients = ingredientsList.querySelectorAll('li');
+
+    const text = Array.from(ingredients)
+      .map((ingredient) => ingredient.textContent?.trim())
+      .filter(Boolean)
+      .join('\n');
+
+    try {
+      await navigator.clipboard.writeText(
+        `Ingredienti per ${currentServings} persone:\n\n${text}`
+      );
+
+      if (copyButton) {
+        copyButton.textContent = '✓ Copiati!';
+
+        setTimeout(() => {
+          copyButton.textContent = '📋 Copia ingredienti';
+        }, 1500);
+      }
+    } catch {
+      alert('Impossibile copiare gli ingredienti.');
+    }
+  });
+</script>
