@@ -26,20 +26,14 @@ const {
   category,
   tags,
   servings,
+  cuisine,
+  season,
   prepTime,
   cookTime,
   difficulty,
   image,
   ingredients,
 } = recipe.data;
-
-const categoryIcons: Record<string, string> = {
-  antipasto: '🥖',
-  primo: '🍝',
-  secondo: '🥘',
-  contorno: '🥗',
-  dolce: '🍰',
-};
 
 const baseUrl = import.meta.env.BASE_URL.endsWith('/')
   ? import.meta.env.BASE_URL
@@ -67,7 +61,7 @@ const baseUrl = import.meta.env.BASE_URL.endsWith('/')
 
     <header class="recipe-header">
       <span class={`recipe-category recipe-category--${category}`}>
-        {categoryIcons[category] || '🍴'} {category}
+        {category}
       </span>
 
       <h1 class="recipe-title">{title}</h1>
@@ -79,44 +73,39 @@ const baseUrl = import.meta.env.BASE_URL.endsWith('/')
       )}
 
       <div class="recipe-meta">
-        {servings && (
-          <div class="recipe-meta__item">
-            <span class="recipe-meta__icon" aria-hidden="true">👥</span>
-            <div class="recipe-meta__details">
-              <span class="recipe-meta__label">Porzioni</span>
-              <span class="recipe-meta__value">{servings} persone</span>
-            </div>
-          </div>
+        {cuisine && (
+          <span class="recipe-meta__item">
+            <span class="recipe-meta__label">Cucina</span>
+            <span class="recipe-meta__value">{cuisine}</span>
+          </span>
+        )}
+
+        {season && (
+          <span class="recipe-meta__item">
+            <span class="recipe-meta__label">Stagione</span>
+            <span class="recipe-meta__value">{season}</span>
+          </span>
         )}
 
         {prepTime && (
-          <div class="recipe-meta__item">
-            <span class="recipe-meta__icon" aria-hidden="true">⏱️</span>
-            <div class="recipe-meta__details">
-              <span class="recipe-meta__label">Preparazione</span>
-              <span class="recipe-meta__value">{prepTime} min</span>
-            </div>
-          </div>
+          <span class="recipe-meta__item">
+            <span class="recipe-meta__label">Preparazione</span>
+            <span class="recipe-meta__value">{prepTime} min</span>
+          </span>
         )}
 
         {cookTime !== undefined && (
-          <div class="recipe-meta__item">
-            <span class="recipe-meta__icon" aria-hidden="true">🔥</span>
-            <div class="recipe-meta__details">
-              <span class="recipe-meta__label">Cottura</span>
-              <span class="recipe-meta__value">{cookTime > 0 ? `${cookTime} min` : 'Nessuna'}</span>
-            </div>
-          </div>
+          <span class="recipe-meta__item">
+            <span class="recipe-meta__label">Cottura</span>
+            <span class="recipe-meta__value">{cookTime > 0 ? `${cookTime} min` : 'Nessuna'}</span>
+          </span>
         )}
 
         {difficulty && (
-          <div class="recipe-meta__item">
-            <span class="recipe-meta__icon" aria-hidden="true">📊</span>
-            <div class="recipe-meta__details">
-              <span class="recipe-meta__label">Difficoltà</span>
-              <span class="recipe-meta__value">{difficulty}</span>
-            </div>
-          </div>
+          <span class="recipe-meta__item">
+            <span class="recipe-meta__label">Difficoltà</span>
+            <span class="recipe-meta__value">{difficulty}</span>
+          </span>
         )}
       </div>
 
@@ -142,6 +131,7 @@ const baseUrl = import.meta.env.BASE_URL.endsWith('/')
     <RecipeIngredients
       ingredients={ingredients}
       servings={servings}
+      variants={recipe.data.variants}
     />
 
     <section class="recipe-content">

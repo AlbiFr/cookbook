@@ -160,7 +160,7 @@ const tags = [
           data-description={recipe.data.description?.toLowerCase() ?? ''}
           data-category={recipe.data.category}
           data-tags={recipe.data.tags.join('|')}
-          data-ingredients={recipe.data.ingredients.map(i => i.item.toLowerCase()).join(' ')}
+          data-ingredients={[...recipe.data.ingredients, ...recipe.data.variants.flatMap(v => v.ingredients)].map(i => i.item.toLowerCase()).join(' ')}
         >
           <RecipeCard
             slug={recipe.id}

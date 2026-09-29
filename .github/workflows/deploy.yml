@@ -5,20 +5,20 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-# Permessi necessari per pubblicare su GitHub Pages
+# Permission for GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Permette un solo deployment simultaneo
+# One deploy at the time
 concurrency:
   group: 'pages'
   cancel-in-progress: false
 
 jobs:
   build:
-    name: Compilazione Ricettario
+    name: Compiling CookBook
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -30,25 +30,25 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Installazione dipendenze
+      - name: Install Dependency
         run: npm ci
 
-      - name: Build del sito statico con Astro
+      - name: Build with Astro
         run: npm run build
 
-      - name: Caricamento artefatto per GitHub Pages
+      - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
 
   deploy:
-    name: Pubblicazione su GitHub Pages
+    name: Publish on GitHub Pages
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy su GitHub Pages
+      - name: Deploy on GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

@@ -5,20 +5,43 @@ interface Ingredient {
   item: string;
 }
 
-interface Props {
+interface Variant {
+  name: string;
+  description?: string;
   ingredients: Ingredient[];
-  servings: number;
 }
 
-const { ingredients, servings } = Astro.props;
+interface Props {
+  title: string;
+  ingredients: Ingredient[];
+  servings: number;
+  variants?: Variant[];
+}
+
+const { title, ingredients, servings, variants = [] } = Astro.props;
+
+const allVariants = [
+  { name: 'Originale', description: undefined, ingredients },
+  ...variants,
+];
+
+const hasVariants = variants.length > 0;
+
+function capitalize(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function formatIngredientQuantity(ingredient: Ingredient): string {
+  if (ingredient.unit === 'qb') return 'q.b.';
+  const qty = ingredient.quantity ?? '';
+  const unit = ingredient.unit ? ` ${ingredient.unit}` : '';
+  return `${qty}${unit}`;
+}
 ---
 
 <section class="recipe-ingredients" aria-labelledby="ingredients-heading">
   <div class="recipe-ingredients__header">
-    <div class="recipe-ingredients__title-group">
-      <h2 id="ingredients-heading" class="recipe-ingredients__title">Ingredienti</h2>
-      <span class="recipe-ingredients__hint">Tocca un ingrediente per spuntarlo mentre cucini</span>
-    </div>
+    <h2 id="ingredients-heading" class="recipe-ingredients__title">Ingredienti</h2>
 
     <div class="servings-control">
       <span class="servings-control__label">Porzioni</span>
@@ -44,41 +67,53 @@ const { ingredients, servings } = Astro.props;
     </div>
   </div>
 
-  <ul id="ingredients-list" class="ingredients-list">
-    {ingredients.map((ingredient, index) => (
-      <li
-        class="ingredient"
-        data-quantity={ingredient.quantity ?? ''}
-        data-unit={ingredient.unit ?? ''}
-        data-item={ingredient.item}
-        data-index={index}
-      >
-        <label class="ingredient__label">
-          <input
-            type="checkbox"
-            class="ingredient__checkbox"
-            aria-label={`Spunta ${ingredient.item}`}
-          />
-          <span class="ingredient__check-custom" aria-hidden="true">
-            <svg viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="1.5 5 4.5 8 10.5 1.5"></polyline>
-            </svg>
-          </span>
-          <span class="ingredient__text">
-            <span class="ingredient__quantity">
-              {ingredient.quantity ?? ''}
-              {ingredient.unit ? ` ${ingredient.unit}` : ''}
+  {hasVariants && (
+    <div class="variant-switcher" role="tablist" aria-label="Varianti della ricetta">
+      {allVariants.map((variant, index) => (
+        <button
+          type="button"
+          class={`variant-pill${index === 0 ? ' variant-pill--active' : ''}`}
+          data-variant-index={index}
+          role="tab"
+          aria-selected={index === 0 ? 'true' : 'false'}
+        >
+          {variant.name}
+        </button>
+      ))}
+    </div>
+  )}
+
+  {allVariants.map((variant, index) => (
+    <div
+      class={`variant-panel${index === 0 ? ' variant-panel--active' : ''}`}
+      data-variant-index={index}
+      role="tabpanel"
+    >
+      {variant.description && (
+        <p class="variant-note">{variant.description}</p>
+      )}
+      <ul class="ingredients-list">
+        {variant.ingredients.map((ingredient, i) => (
+          <li
+            class="ingredient"
+            data-quantity={ingredient.quantity ?? ''}
+            data-unit={ingredient.unit ?? ''}
+            data-item={ingredient.item}
+            data-index={i}
+          >
+            <span class="ingredient__text">
+              <span class="ingredient__name">{capitalize(ingredient.item)}</span>
+              <span class="ingredient__quantity">{formatIngredientQuantity(ingredient)}</span>
             </span>
-            <span class="ingredient__name">{ingredient.item}</span>
-          </span>
-        </label>
-      </li>
-    ))}
-  </ul>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
 
   <div class="recipe-ingredients__footer">
     <button id="copy-ingredients" class="copy-button" type="button">
-      <span class="copy-button__icon" aria-hidden="true">📋</span>
+      <span class="copy-button__icon" aria-hidden="true"></span>
       <span class="copy-button__text">Copia lista per la spesa</span>
     </button>
   </div>
@@ -88,34 +123,38 @@ const { ingredients, servings } = Astro.props;
   let currentServings = originalServings;
 
   const servingsValue = document.querySelector('#servings-value');
-  const ingredientsList = document.querySelector('#ingredients-list');
   const decreaseButton = document.querySelector('#decrease-servings');
   const increaseButton = document.querySelector('#increase-servings');
   const copyButton = document.querySelector('#copy-ingredients');
+  const variantPills = document.querySelectorAll('.variant-pill');
+  const variantPanels = document.querySelectorAll('.variant-panel');
 
   function formatQuantity(value) {
     if (Number.isInteger(value)) {
       return value.toString();
     }
-    // Round to 2 decimal places and remove trailing zeros
     const rounded = Math.round(value * 100) / 100;
     return rounded.toString().replace('.', ',');
   }
 
   function updateIngredients() {
-    if (!servingsValue || !ingredientsList) return;
-
+    if (!servingsValue) return;
     servingsValue.textContent = currentServings;
 
-    const ingredients = ingredientsList.querySelectorAll('.ingredient');
-
-    ingredients.forEach((ingredient) => {
+    const allIngredients = document.querySelectorAll('.ingredient');
+    allIngredients.forEach((ingredient) => {
       const quantity = ingredient.getAttribute('data-quantity');
       const unit = ingredient.getAttribute('data-unit') || '';
       const quantityElement = ingredient.querySelector('.ingredient__quantity');
-
       if (!quantityElement) return;
 
+      // Don't scale "q.b." (quanto basta) ingredients
+      if (unit.toLowerCase() === 'qb') {
+        quantityElement.textContent = 'q.b.';
+        return;
+      }
+
+      // Don't scale ingredients without a numeric quantity
       if (!quantity || isNaN(Number(quantity))) {
         quantityElement.textContent = unit ? unit : '';
         return;
@@ -123,8 +162,37 @@ const { ingredients, servings } = Astro.props;
 
       const originalQuantity = Number(quantity);
       const newQuantity = (originalQuantity * currentServings) / originalServings;
-
       quantityElement.textContent = `${formatQuantity(newQuantity)}${unit ? ` ${unit}` : ''}`;
+    });
+  }
+
+  function activateVariant(index) {
+    variantPills.forEach((pill, i) => {
+      pill.classList.toggle('variant-pill--active', i === index);
+      pill.setAttribute('aria-selected', i === index ? 'true' : 'false');
+    });
+    variantPanels.forEach((panel, i) => {
+      panel.classList.toggle('variant-panel--active', i === index);
+    });
+  }
+
+  function slugify(name) {
+    return name.toLowerCase().trim().replace(/\s+/g, '-');
+  }
+
+  variantPills.forEach((pill, index) => {
+    pill.addEventListener('click', () => {
+      activateVariant(index);
+      history.replaceState(null, '', `#${slugify(pill.textContent)}`);
+    });
+  });
+
+  if (variantPills.length > 0 && window.location.hash) {
+    const hash = window.location.hash.slice(1).toLowerCase();
+    variantPills.forEach((pill, index) => {
+      if (slugify(pill.textContent) === hash) {
+        activateVariant(index);
+      }
     });
   }
 
@@ -142,28 +210,20 @@ const { ingredients, servings } = Astro.props;
     }
   });
 
-  // Checkbox state toggle
-  ingredientsList?.querySelectorAll('.ingredient__checkbox').forEach((checkbox) => {
-    checkbox.addEventListener('change', (e) => {
-      const item = (e.target).closest('.ingredient');
-      item?.classList.toggle('ingredient--checked', (e.target).checked);
-    });
-  });
-
-  // Copy to clipboard
   copyButton?.addEventListener('click', async () => {
-    if (!ingredientsList) return;
+    const activePanel = document.querySelector('.variant-panel--active');
+    if (!activePanel) return;
 
-    const items = ingredientsList.querySelectorAll('.ingredient');
+    const items = activePanel.querySelectorAll('.ingredient');
     const lines = [];
 
     items.forEach((item) => {
       const qty = item.querySelector('.ingredient__quantity')?.textContent?.trim() ?? '';
       const name = item.querySelector('.ingredient__name')?.textContent?.trim() ?? '';
-      lines.push(qty ? `- ${qty} ${name}` : `- ${name}`);
+      lines.push(qty ? `- ${name} — ${qty}` : `- ${name}`);
     });
 
-    const textToCopy = `🛒 Ingredienti per ${currentServings} persone:\n\n${lines.join('\n')}`;
+    const textToCopy = `Ingredienti per ${currentServings} porzioni:\n\n${lines.join('\n')}`;
 
     try {
       await navigator.clipboard.writeText(textToCopy);
@@ -179,7 +239,7 @@ const { ingredients, servings } = Astro.props;
 
         setTimeout(() => {
           if (textSpan) textSpan.textContent = originalText;
-          if (iconSpan) iconSpan.textContent = '📋';
+          if (iconSpan) iconSpan.textContent = '';
           copyButton.classList.remove('copy-button--success');
         }, 2200);
       }

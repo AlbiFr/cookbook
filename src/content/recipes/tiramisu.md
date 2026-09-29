@@ -11,6 +11,9 @@ tags:
 
 servings: 8
 
+cuisine: italiana
+season: tutto l'anno
+
 prepTime: 30
 cookTime: 0
 
@@ -40,20 +43,26 @@ ingredients:
   - quantity: 30
     unit: g
     item: cacao amaro
+
 ---
 
 ## Preparazione
 
-1. Preparare il caffè e lasciarlo raffreddare.
-2. Separare i tuorli dagli albumi.
-3. Montare i tuorli con lo zucchero.
-4. Incorporare il mascarpone.
-5. Montare gli albumi a neve e incorporarli delicatamente.
-6. Inzuppare i savoiardi nel caffè.
-7. Creare gli strati alternando savoiardi e crema.
-8. Terminare con il cacao amaro.
-9. Lasciare riposare in frigorifero per almeno 4 ore.
+1. **Preparare il caffè**:
+   Preparare il caffè e lasciarlo raffreddare in una ciotola bassa.
 
-## Note
+2. **Fare la crema**:
+   Separare i tuorli dagli albumi. Montare i tuorli con lo zucchero fino a ottenere un composto chiaro e spumoso, poi incorporare il mascarpone.
 
-Da preparare idealmente il giorno prima.
+3. **Montare gli albumi**:
+   Montare gli albumi a neve ferma e incorporarli delicatamente alla crema di tuorli.
+
+4. **Comporre il tiramisù**:
+   Inzuppare i savoiardi nel caffè e creare gli strati alternando savoiardi e crema in una teglia.
+
+5. **Riposo**:
+   Terminare con il cacao amaro spolverato e lasciare riposare in frigorifero per almeno **4 ore**.
+
+## Conservazione
+
+Conservare in frigorifero per un massimo di **2 giorni**, coperto con pellicola.
