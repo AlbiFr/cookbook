@@ -5,9 +5,7 @@ description: Il classico tiramisù italiano.
 category: dolce
 
 tags:
-  - italiano
-  - facile
-  - dessert
+  - cena con amici
 
 servings: 8
 

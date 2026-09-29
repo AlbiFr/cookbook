@@ -5,14 +5,13 @@ description: Morbidi dentro, croccanti fuori, con gocce di cioccolato fondente.
 category: dolce
 
 tags:
-  - italiano
-  - dessert
   - forno
+  - cena con amici
 
 servings: 24
 
 cuisine: italiana
-season: inverno
+season: tutto l'anno
 
 prepTime: 20
 cookTime: 12

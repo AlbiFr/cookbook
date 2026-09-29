@@ -5,33 +5,63 @@ import { getCollection } from 'astro:content';
 
 const recipes = await getCollection('recipes');
 
-const categories = [
-  'antipasto',
-  'primo',
-  'secondo',
-  'contorno',
-  'dolce',
-];
-
-const categoryConfig: Record<string, { label: string; icon: string }> = {
-  antipasto: { label: 'Antipasti', icon: '🥖' },
-  primo: { label: 'Primi', icon: '🍝' },
-  secondo: { label: 'Secondi', icon: '🥘' },
-  contorno: { label: 'Contorni', icon: '🥗' },
-  dolce: { label: 'Dolci', icon: '🍰' },
+// Helper to get unique sorted values from recipes
+const getUniqueValues = (getter: (r: typeof recipes[number]) => string | undefined): string[] => {
+  return [
+    ...new Set(
+      recipes
+        .map(getter)
+        .filter((v): v is string => Boolean(v))
+    ),
+  ].sort();
 };
 
-const tags = [
-  ...new Set(
-    recipes.flatMap((recipe) => recipe.data.tags)
-  ),
-].sort();
+const categories = getUniqueValues((r) => r.data.category);
+const difficulties = getUniqueValues((r) => r.data.difficulty);
+const cuisines = getUniqueValues((r) => r.data.cuisine);
+const seasons = getUniqueValues((r) => r.data.season);
+const tags = [...new Set(recipes.flatMap((r) => r.data.tags))].sort();
+
+// Label mappings (no icons)
+const categoryLabels: Record<string, string> = {
+  antipasto: 'Antipasti',
+  primo: 'Primi',
+  secondo: 'Secondi',
+  contorno: 'Contorni',
+  dolce: 'Dolci',
+  bibita: 'Bibite',
+  'salse/basi': 'Salse e Basi',
+  'piatto unico': 'Piatto Unico',
+};
+
+const difficultyLabels: Record<string, string> = {
+  facile: 'Facile',
+  media: 'Media',
+  difficile: 'Difficile',
+};
+
+const cuisineLabels: Record<string, string> = {
+  italiana: 'Italiana',
+  colombiana: 'Colombiana',
+  messicana: 'Messicana',
+  giapponese: 'Giapponese',
+  francese: 'Francese',
+  mediterranea: 'Mediterranea',
+  altro: 'Altro',
+};
+
+const seasonLabels: Record<string, string> = {
+  primavera: 'Primavera',
+  estate: 'Estate',
+  autunno: 'Autunno',
+  inverno: 'Inverno',
+  "tutto l'anno": "Tutto l'anno",
+};
 ---
 
 <Layout title="Le Nostre Ricette">
   <section class="hero">
     <div class="hero__badge">
-      <span class="hero__badge-icon" aria-hidden="true">🍳</span>
       <span>Ricettario di Casa</span>
       <span class="hero__badge-dot">·</span>
       <span>{recipes.length} {recipes.length === 1 ? 'ricetta' : 'ricette'}</span>
@@ -45,7 +75,7 @@ const tags = [
   </section>
 
   <section class="recipe-browser" aria-label="Cerca e filtra le ricette">
-    <!-- Search Bar -->
+    <!-- Search Bar with Filter Button -->
     <div class="search-container">
       <div class="search-box">
         <span class="search-icon" aria-hidden="true">
@@ -67,11 +97,33 @@ const tags = [
           id="search"
           class="search-input"
           type="search"
-          placeholder="Cerca per titolo, ingrediente o tag (es. melanzane, facile)..."
+          placeholder="Cerca per titolo, ingrediente o tag..."
           aria-label="Cerca una ricetta"
           autocomplete="off"
         />
-        <kbd class="search-kbd" title="Premi / per cercare">/</kbd>
+        <button
+          id="filter-toggle"
+          class="filter-toggle"
+          type="button"
+          aria-label="Apri filtri"
+          aria-expanded="false"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="7" y1="12" x2="17" y2="12"></line>
+            <line x1="10" y1="18" x2="14" y2="18"></line>
+          </svg>
+          <span class="filter-toggle__badge hidden" id="filter-badge"></span>
+        </button>
         <button
           id="clear-search"
           class="search-clear hidden"
@@ -83,128 +135,210 @@ const tags = [
       </div>
     </div>
 
-    <!-- Filters Section -->
-    <div class="filters-card">
-      <!-- Portate (Categories) -->
-      <div class="filter-row">
-        <span class="filter-row__label">
-          <span class="filter-row__icon" aria-hidden="true">🍽️</span>
-          Portata
-        </span>
-        <div class="filter-chips">
-          <button
-            class="filter-chip filter-chip--category active"
-            data-category="all"
-            type="button"
-          >
-            <span class="filter-chip__icon" aria-hidden="true">✨</span>
-            <span class="filter-chip__label">Tutte</span>
-            <span class="filter-chip__count">{recipes.length}</span>
-          </button>
-
-          {categories.map((category) => {
-            const count = recipes.filter((r) => r.data.category === category).length;
-            if (count === 0) return null;
-            const config = categoryConfig[category] || { label: category, icon: '🍴' };
-            return (
-              <button
-                class="filter-chip filter-chip--category"
-                data-category={category}
-                type="button"
-              >
-                <span class="filter-chip__icon" aria-hidden="true">{config.icon}</span>
-                <span class="filter-chip__label">{config.label}</span>
-                <span class="filter-chip__count">{count}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      <!-- Tag (Tags) -->
-      {tags.length > 0 && (
-        <div class="filter-row filter-row--tags">
-          <span class="filter-row__label">
-            <span class="filter-row__icon" aria-hidden="true">🏷️</span>
-            Tag
-          </span>
-          <div class="filter-chips">
-            {tags.map((tag) => (
-              <button
-                class="filter-chip filter-chip--tag"
-                data-tag={tag}
-                type="button"
-              >
-                #{tag}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <!-- Active summary bar -->
-      <div id="filter-status" class="filter-status hidden">
-        <span id="filter-status-text" class="filter-status__text"></span>
-        <button id="reset-filters" class="filter-status__reset" type="button">
-          Azzera tutti i filtri ✕
-        </button>
-      </div>
+    <!-- Active filters summary (always visible) -->
+    <div id="filter-status" class="filter-status hidden">
+      <span id="filter-status-text" class="filter-status__text"></span>
+      <button id="reset-filters" class="filter-status__reset" type="button">
+        Azzera filtri
+      </button>
     </div>
 
-    <!-- Recipe Grid -->
-    <div id="recipe-grid" class="recipe-grid">
-      {recipes.map((recipe) => (
-        <div
-          class="recipe-wrapper"
-          data-title={recipe.data.title.toLowerCase()}
-          data-description={recipe.data.description?.toLowerCase() ?? ''}
-          data-category={recipe.data.category}
-          data-tags={recipe.data.tags.join('|')}
-          data-ingredients={[...recipe.data.ingredients, ...recipe.data.variants.flatMap(v => v.ingredients)].map(i => i.item.toLowerCase()).join(' ')}
-        >
-          <RecipeCard
-            slug={recipe.id}
-            title={recipe.data.title}
-            description={recipe.data.description}
-            category={recipe.data.category}
-            tags={recipe.data.tags}
-            image={recipe.data.image}
-            prepTime={recipe.data.prepTime}
-            cookTime={recipe.data.cookTime}
-            difficulty={recipe.data.difficulty}
-          />
-        </div>
-      ))}
+    <!-- Recipe Carousels -->
+    <div id="recipe-grid" class="recipe-carousels">
+      {categories.map((category) => {
+        const categoryRecipes = recipes.filter((r) => r.data.category === category);
+        if (categoryRecipes.length === 0) return null;
+        return (
+          <div class="carousel-section" data-category={category}>
+            <h2 class="carousel-section__title">{categoryLabels[category] || category}</h2>
+            <div class="carousel">
+              {categoryRecipes.map((recipe) => (
+                <div
+                  class="recipe-wrapper"
+                  data-title={recipe.data.title.toLowerCase()}
+                  data-description={recipe.data.description?.toLowerCase() ?? ''}
+                  data-category={recipe.data.category}
+                  data-tags={recipe.data.tags.join('|')}
+                  data-ingredients={[...recipe.data.ingredients, ...recipe.data.variants.flatMap(v => v.ingredients)].map(i => i.item.toLowerCase()).join(' ')}
+                  data-difficulty={recipe.data.difficulty ?? ''}
+                  data-cuisine={recipe.data.cuisine ?? ''}
+                  data-season={recipe.data.season ?? ''}
+                >
+                  <RecipeCard
+                    slug={recipe.id}
+                    title={recipe.data.title}
+                    category={recipe.data.category}
+                    image={recipe.data.image}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </div>
 
     <!-- Empty State -->
     <div id="no-results" class="no-results hidden">
-      <span class="no-results__icon" aria-hidden="true">🥣</span>
       <h2 class="no-results__title">Nessuna ricetta trovata</h2>
       <p class="no-results__text">
         Non abbiamo trovato ricette che corrispondono ai filtri o alla ricerca selezionata.
       </p>
       <button id="reset-no-results" class="no-results__reset" type="button">
-        Reimposta tutti i filtri
+        Reimposta filtri
       </button>
     </div>
   </section>
+
+  <!-- Filter Modal -->
+  <div id="filter-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="filter-modal-title">
+    <div class="modal__backdrop" id="modal-backdrop"></div>
+    <div class="modal__content">
+      <div class="modal__header">
+        <h2 id="filter-modal-title" class="modal__title">Filtri</h2>
+        <button id="modal-close" class="modal__close" type="button" aria-label="Chiudi filtri">
+          ✕
+        </button>
+      </div>
+
+      <div class="modal__body">
+        <!-- Difficulty -->
+        {difficulties.length > 0 && (
+          <div class="filter-section">
+            <span class="filter-section__label">Difficoltà</span>
+            <div class="filter-chips">
+              <button
+                class="filter-chip filter-chip--difficulty active"
+                data-difficulty="all"
+                type="button"
+              >
+                Tutte
+              </button>
+              {difficulties.map((d) => (
+                <button
+                  class="filter-chip filter-chip--difficulty"
+                  data-difficulty={d}
+                  type="button"
+                >
+                  {difficultyLabels[d] || d}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- Cuisine -->
+        {cuisines.length > 0 && (
+          <div class="filter-section">
+            <span class="filter-section__label">Cucina</span>
+            <div class="filter-chips">
+              <button
+                class="filter-chip filter-chip--cuisine active"
+                data-cuisine="all"
+                type="button"
+              >
+                Tutte
+              </button>
+              {cuisines.map((c) => (
+                <button
+                  class="filter-chip filter-chip--cuisine"
+                  data-cuisine={c}
+                  type="button"
+                >
+                  {cuisineLabels[c] || c}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- Season -->
+        {seasons.length > 0 && (
+          <div class="filter-section">
+            <span class="filter-section__label">Stagione</span>
+            <div class="filter-chips">
+              <button
+                class="filter-chip filter-chip--season active"
+                data-season="all"
+                type="button"
+              >
+                Tutte
+              </button>
+              {seasons.map((s) => (
+                <button
+                  class="filter-chip filter-chip--season"
+                  data-season={s}
+                  type="button"
+                >
+                  {seasonLabels[s] || s}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- Tags -->
+        {tags.length > 0 && (
+          <div class="filter-section">
+            <span class="filter-section__label">Tag</span>
+            <div class="filter-chips">
+              {tags.map((t) => (
+                <button
+                  class="filter-chip filter-chip--tag"
+                  data-tag={t}
+                  type="button"
+                >
+                  #{t}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div class="modal__footer">
+        <button id="modal-reset" class="modal__reset" type="button">
+          Azzera tutto
+        </button>
+        <button id="modal-apply" class="modal__apply" type="button">
+          Mostra ricette
+        </button>
+      </div>
+    </div>
+  </div>
 </Layout>
 
 <script>
   const searchInput = document.querySelector<HTMLInputElement>('#search');
   const clearSearchBtn = document.querySelector<HTMLButtonElement>('#clear-search');
+  const filterToggle = document.querySelector<HTMLButtonElement>('#filter-toggle');
+  const filterBadge = document.querySelector<HTMLElement>('#filter-badge');
   const recipeWrappers = document.querySelectorAll<HTMLElement>('.recipe-wrapper');
-  const categoryChips = document.querySelectorAll<HTMLButtonElement>('.filter-chip--category');
-  const tagChips = document.querySelectorAll<HTMLButtonElement>('.filter-chip--tag');
   const noResults = document.querySelector<HTMLElement>('#no-results');
   const resetFiltersBtn = document.querySelector<HTMLButtonElement>('#reset-filters');
   const resetNoResultsBtn = document.querySelector<HTMLButtonElement>('#reset-no-results');
   const filterStatus = document.querySelector<HTMLElement>('#filter-status');
   const filterStatusText = document.querySelector<HTMLElement>('#filter-status-text');
 
+  // Modal elements
+  const modal = document.querySelector<HTMLElement>('#filter-modal');
+  const modalBackdrop = document.querySelector<HTMLElement>('#modal-backdrop');
+  const modalClose = document.querySelector<HTMLButtonElement>('#modal-close');
+  const modalReset = document.querySelector<HTMLButtonElement>('#modal-reset');
+  const modalApply = document.querySelector<HTMLButtonElement>('#modal-apply');
+
+  // Filter chips
+  const categoryChips = document.querySelectorAll<HTMLButtonElement>('.filter-chip--category');
+  const difficultyChips = document.querySelectorAll<HTMLButtonElement>('.filter-chip--difficulty');
+  const cuisineChips = document.querySelectorAll<HTMLButtonElement>('.filter-chip--cuisine');
+  const seasonChips = document.querySelectorAll<HTMLButtonElement>('.filter-chip--season');
+  const tagChips = document.querySelectorAll<HTMLButtonElement>('.filter-chip--tag');
+
   const totalRecipesCount = recipeWrappers.length;
   let selectedCategory = 'all';
+  let selectedDifficulty = 'all';
+  let selectedCuisine = 'all';
+  let selectedSeason = 'all';
   let selectedTag: string | null = null;
 
   function updateRecipes() {
@@ -222,6 +356,9 @@ const tags = [
       const category = recipe.getAttribute('data-category') ?? '';
       const tags = recipe.getAttribute('data-tags') ?? '';
       const ingredients = recipe.getAttribute('data-ingredients') ?? '';
+      const difficulty = recipe.getAttribute('data-difficulty') ?? '';
+      const cuisine = recipe.getAttribute('data-cuisine') ?? '';
+      const season = recipe.getAttribute('data-season') ?? '';
 
       const matchesSearch =
         !search ||
@@ -231,14 +368,21 @@ const tags = [
         ingredients.includes(search);
 
       const matchesCategory =
-        selectedCategory === 'all' ||
-        category === selectedCategory;
+        selectedCategory === 'all' || category === selectedCategory;
+
+      const matchesDifficulty =
+        selectedDifficulty === 'all' || difficulty === selectedDifficulty;
+
+      const matchesCuisine =
+        selectedCuisine === 'all' || cuisine === selectedCuisine;
+
+      const matchesSeason =
+        selectedSeason === 'all' || season === selectedSeason;
 
       const matchesTag =
-        !selectedTag ||
-        tags.split('|').includes(selectedTag);
+        !selectedTag || tags.split('|').includes(selectedTag);
 
-      const visible = matchesSearch && matchesCategory && matchesTag;
+      const visible = matchesSearch && matchesCategory && matchesDifficulty && matchesCuisine && matchesSeason && matchesTag;
 
       recipe.classList.toggle('hidden', !visible);
 
@@ -250,12 +394,27 @@ const tags = [
     noResults?.classList.toggle('hidden', visibleCount > 0);
 
     // Update filter status bar
-    const hasActiveFilters = Boolean(search || selectedCategory !== 'all' || selectedTag);
+    const activeFiltersCount = [
+      selectedCategory !== 'all',
+      selectedDifficulty !== 'all',
+      selectedCuisine !== 'all',
+      selectedSeason !== 'all',
+      selectedTag !== null,
+    ].filter(Boolean).length;
+
+    const hasActiveFilters = Boolean(search || activeFiltersCount > 0);
+
     if (filterStatus && filterStatusText) {
       filterStatus.classList.toggle('hidden', !hasActiveFilters);
       if (hasActiveFilters) {
         filterStatusText.textContent = `Mostrando ${visibleCount} di ${totalRecipesCount} ricette`;
       }
+    }
+
+    // Update filter badge
+    if (filterBadge) {
+      filterBadge.textContent = String(activeFiltersCount);
+      filterBadge.classList.toggle('hidden', activeFiltersCount === 0);
     }
   }
 
@@ -264,10 +423,25 @@ const tags = [
       searchInput.value = '';
     }
     selectedCategory = 'all';
+    selectedDifficulty = 'all';
+    selectedCuisine = 'all';
+    selectedSeason = 'all';
     selectedTag = null;
 
     categoryChips.forEach((btn) => {
       btn.classList.toggle('active', btn.getAttribute('data-category') === 'all');
+    });
+
+    difficultyChips.forEach((btn) => {
+      btn.classList.toggle('active', btn.getAttribute('data-difficulty') === 'all');
+    });
+
+    cuisineChips.forEach((btn) => {
+      btn.classList.toggle('active', btn.getAttribute('data-cuisine') === 'all');
+    });
+
+    seasonChips.forEach((btn) => {
+      btn.classList.toggle('active', btn.getAttribute('data-season') === 'all');
     });
 
     tagChips.forEach((btn) => {
@@ -277,14 +451,34 @@ const tags = [
     updateRecipes();
   }
 
+  // Modal functions
+  function openModal() {
+    if (modal) {
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      filterToggle?.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  function closeModal() {
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+      filterToggle?.setAttribute('aria-expanded', 'false');
+    }
+  }
+
   // Keyboard shortcut: '/' focuses search input
   window.addEventListener('keydown', (e) => {
     if (e.key === '/' && document.activeElement !== searchInput) {
       const activeTag = document.activeElement?.tagName.toLowerCase();
-      if (activeTag !== 'input' && activeTag !== 'textarea') {
+      if (activeTag !== 'input' && activeTag !== 'textarea' && activeTag !== 'select') {
         e.preventDefault();
         searchInput?.focus();
       }
+    }
+    if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+      closeModal();
     }
   });
 
@@ -301,12 +495,56 @@ const tags = [
   resetFiltersBtn?.addEventListener('click', resetAll);
   resetNoResultsBtn?.addEventListener('click', resetAll);
 
+  // Modal events
+  filterToggle?.addEventListener('click', openModal);
+  modalClose?.addEventListener('click', closeModal);
+  modalBackdrop?.addEventListener('click', closeModal);
+  modalApply?.addEventListener('click', closeModal);
+  modalReset?.addEventListener('click', resetAll);
+
+  // Filter chip events
   categoryChips.forEach((button) => {
     button.addEventListener('click', () => {
       const category = button.getAttribute('data-category') ?? 'all';
       selectedCategory = category;
 
       categoryChips.forEach((b) => b.classList.remove('active'));
+      button.classList.add('active');
+
+      updateRecipes();
+    });
+  });
+
+  difficultyChips.forEach((button) => {
+    button.addEventListener('click', () => {
+      const difficulty = button.getAttribute('data-difficulty') ?? 'all';
+      selectedDifficulty = difficulty;
+
+      difficultyChips.forEach((b) => b.classList.remove('active'));
+      button.classList.add('active');
+
+      updateRecipes();
+    });
+  });
+
+  cuisineChips.forEach((button) => {
+    button.addEventListener('click', () => {
+      const cuisine = button.getAttribute('data-cuisine') ?? 'all';
+      selectedCuisine = cuisine;
+
+      cuisineChips.forEach((b) => b.classList.remove('active'));
+      button.classList.add('active');
+
+      updateRecipes();
+    });
+  });
+
+  seasonChips.forEach((button) => {
+    button.addEventListener('click', () => {
+      const season = button.getAttribute('data-season') ?? 'all';
+      selectedSeason = season;
+
+      seasonChips.forEach((b) => b.classList.remove('active'));
       button.classList.add('active');
 
       updateRecipes();

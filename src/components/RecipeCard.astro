@@ -2,26 +2,15 @@
 interface Props {
   slug: string;
   title: string;
-  description?: string;
   category: string;
-  tags: string[];
   image?: string;
-  prepTime?: number;
-  cookTime?: number;
-  difficulty?: 'facile' | 'media' | 'difficile';
 }
 
-const {
-  slug,
-  title,
-  description,
-  category,
-  tags,
-  image,
-  prepTime,
-  cookTime,
-  difficulty,
-} = Astro.props;
+const { slug, title, category, image } = Astro.props;
+
+const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
 
 const categoryIcons: Record<string, string> = {
   antipasto: '🥖',
@@ -29,13 +18,10 @@ const categoryIcons: Record<string, string> = {
   secondo: '🥘',
   contorno: '🥗',
   dolce: '🍰',
+  bibita: '🥤',
+  'salse/basi': '🫙',
+  'piatto unico': '🍽️',
 };
-
-const baseUrl = import.meta.env.BASE_URL.endsWith('/')
-  ? import.meta.env.BASE_URL
-  : `${import.meta.env.BASE_URL}/`;
-
-const totalTime = (prepTime ?? 0) + (cookTime ?? 0);
 ---
 
 <a href={`${baseUrl}recipes/${slug}/`} class="recipe-card" data-category={category}>
@@ -55,43 +41,6 @@ const totalTime = (prepTime ?? 0) + (cookTime ?? 0);
         <span class="recipe-card__placeholder-pattern" aria-hidden="true"></span>
       </div>
     )}
-
-    <span class={`recipe-card__badge recipe-card__badge--${category}`}>
-      {categoryIcons[category] || '🍴'} {category}
-    </span>
   </div>
-
-  <div class="recipe-card__content">
-    <h2 class="recipe-card__title">{title}</h2>
-
-    {description && (
-      <p class="recipe-card__description">{description}</p>
-    )}
-
-    {(totalTime > 0 || difficulty) && (
-      <div class="recipe-card__meta">
-        {totalTime > 0 && (
-          <span class="recipe-card__meta-item">
-            <span class="recipe-card__meta-icon" aria-hidden="true">⏱️</span>
-            <span>{totalTime} min</span>
-          </span>
-        )}
-
-        {difficulty && (
-          <span class="recipe-card__meta-item">
-            <span class="recipe-card__meta-icon" aria-hidden="true">📊</span>
-            <span>{difficulty}</span>
-          </span>
-        )}
-      </div>
-    )}
-
-    {tags.length > 0 && (
-      <div class="recipe-card__tags">
-        {tags.slice(0, 3).map((tag) => (
-          <span class="recipe-card__tag">#{tag}</span>
-        ))}
-      </div>
-    )}
-  </div>
+  <h2 class="recipe-card__title">{title}</h2>
 </a>

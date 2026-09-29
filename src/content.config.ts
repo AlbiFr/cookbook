@@ -18,6 +18,7 @@ const recipes = defineCollection({
       'secondo',
       'contorno',
       'dolce',
+      'piatto unico',
       'bibita',
       'salse/basi'
     ]),

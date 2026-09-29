@@ -5,10 +5,9 @@ description: Parmigiana al forno con melanzane non fritte e mozzarella.
 category: secondo
 
 tags:
-  - italiano
   - vegetariano
-  - facile
   - forno
+  - cena con amici
 
 servings: 8
 

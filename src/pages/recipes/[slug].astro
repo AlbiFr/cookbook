@@ -42,22 +42,6 @@ const baseUrl = import.meta.env.BASE_URL.endsWith('/')
 
 <Layout title={title} description={description}>
   <article class="recipe-page">
-    <div class="recipe-top-nav">
-      <a href={baseUrl} class="recipe-back">
-        <span class="recipe-back__arrow" aria-hidden="true">←</span>
-        <span>Tutte le ricette</span>
-      </a>
-
-      <button
-        type="button"
-        class="recipe-print-btn"
-        onclick="window.print()"
-        aria-label="Stampa questa ricetta"
-      >
-        <span aria-hidden="true">🖨️</span>
-        <span>Stampa</span>
-      </button>
-    </div>
 
     <header class="recipe-header">
       <span class={`recipe-category recipe-category--${category}`}>
@@ -138,11 +122,5 @@ const baseUrl = import.meta.env.BASE_URL.endsWith('/')
       <Content />
     </section>
 
-    <div class="recipe-footer-nav">
-      <a href={baseUrl} class="recipe-back">
-        <span class="recipe-back__arrow" aria-hidden="true">←</span>
-        <span>Torna a tutte le ricette</span>
-      </a>
-    </div>
   </article>
 </Layout>
