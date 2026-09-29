@@ -114,12 +114,7 @@
   width: 100%;
   padding: $space-3 $space-2;
   border-radius: $radius-sm;
-  transition: background $transition-fast;
   cursor: default;
-
-  &:hover {
-    background: $color-primary-light;
-  }
 }
 
 .ingredient__name {
@@ -168,6 +163,10 @@
   &--active {
     background: $color-primary;
     border-color: $color-primary;
+    color: $color-white;
+  }
+
+  &--active:hover {
     color: $color-white;
   }
 }

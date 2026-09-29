@@ -149,13 +149,13 @@ variants:
 ## Preparazione
 
 1. **Mescolai liquidi**
-   In una ciotola grande, aggiungi il burro fuso con gli zuccheri e mescola con una frusta o una spatola fino a ottenere una crema sabbiosa. poi aggiungi l'uovo e la vaniglia finnchè il composto si schiarisce leggermente
+   In una ciotola grande, aggiungere il burro fuso con gli zuccheri e mescolare con una frusta o una spatola fino a ottenere una crema sabbiosa. poi aggiungere l'uovo e la vaniglia finchè il composto si schiarisce leggermente
 
 3. **Incorporare gli ingredienti secchi**
-   Aggiungi farina, lievito bicarbonato e un pizzico di sale, e mescola fino ad ottenere un impasto omogeneo (non troppo lavorato).
+   Aggiungere farina, lievito bicarbonato e un pizzico di sale, e mescolare fino ad ottenere un impasto omogeneo (non troppo lavorato).
 
 4. **Aggiungere il cioccolato**
-   Aggiungi le gocce di cioccolato (e le noci se si usa quella variante), anche se sembrano tante meglio sempre abbondare.
+   Aggiungere le gocce di cioccolato (e le noci se si usa quella variante), ricard non sono mai troppe!
 
 5. **Riposo**
    Coprire e mettere l'impasto in frigo per almeno **1 ora** (meglio tutta la notte, fino ad un massimo di 48 ore, per sviluppare più sapore).
@@ -175,6 +175,6 @@ Durano **4-5 giorni** in un contenitore ermetico, meglio se con un pezzo di mela
 Nel caso congelare l'impasto già porzionato, dura fino a **due mesi**, e poi aggiungere **2 minuti** alla cottura.
 
 ## Consigli
-Se volete raddoppiare o tripicale la quantità consigliamo di **aggiungere un tuorlo** (o 20g di bianco) per renderli ancora più chewy
+Se vuoi raddoppiare o tripicale la quantità consigliamo di **aggiungere un tuorlo** (o 20g di bianco) per renderli ancora più chewy
 
 Volendo per biscotti più densi e rustici (ottimo per quelli alla canella) si posso fare **70% con farina bianca e 30% con farina integrale**
