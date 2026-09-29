@@ -203,18 +203,18 @@
     li {
       position: relative;
       counter-increment: step-counter;
-      padding-left: 2rem;
-      margin-bottom: $space-5;
+      padding-left: 1.75rem;
+      margin-bottom: $space-4;
 
       &::before {
-        content: counter(step-counter);
+        content: counter(step-counter) ".";
         position: absolute;
         left: 0;
-        top: 0.1rem;
+        top: 0.15rem;
         font-family: $font-body;
         font-size: 0.8rem;
         font-weight: 600;
-        color: $color-muted;
+        color: $color-muted-light;
       }
 
       strong {
@@ -268,6 +268,33 @@
   margin-top: $space-8;
   padding-top: $space-6;
   border-top: 1px solid $color-border;
+}
+
+@media (max-width: $breakpoint-mobile) {
+  .recipe-title {
+    font-size: clamp(1.75rem, 8vw, 2.5rem);
+  }
+
+  .recipe-description {
+    font-size: 1rem;
+  }
+
+  .recipe-content {
+    font-size: 1rem;
+
+    h2 {
+      font-size: 1.6rem;
+    }
+
+    ol li {
+      padding-left: 1.5rem;
+      margin-bottom: $space-3;
+
+      &::before {
+        font-size: 0.75rem;
+      }
+    }
+  }
 }
 
 @media (min-width: $breakpoint-tablet) {

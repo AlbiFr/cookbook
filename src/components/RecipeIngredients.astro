@@ -42,28 +42,28 @@ function formatIngredientQuantity(ingredient: Ingredient): string {
 <section class="recipe-ingredients" aria-labelledby="ingredients-heading">
   <div class="recipe-ingredients__header">
     <h2 id="ingredients-heading" class="recipe-ingredients__title">Ingredienti</h2>
+  </div>
 
-    <div class="servings-control">
-      <span class="servings-control__label">Porzioni</span>
-      <div class="servings-control__box">
-        <button
-          id="decrease-servings"
-          type="button"
-          aria-label="Riduci porzioni"
-          class="servings-control__btn"
-        >
-          −
-        </button>
-        <span id="servings-value" class="servings-control__value">{servings}</span>
-        <button
-          id="increase-servings"
-          type="button"
-          aria-label="Aumenta porzioni"
-          class="servings-control__btn"
-        >
-          +
-        </button>
-      </div>
+  <div class="servings-control">
+    <span class="servings-control__label">Porzioni</span>
+    <div class="servings-control__box">
+      <button
+        id="decrease-servings"
+        type="button"
+        aria-label="Riduci porzioni"
+        class="servings-control__btn"
+      >
+        −
+      </button>
+      <span id="servings-value" class="servings-control__value">{servings}</span>
+      <button
+        id="increase-servings"
+        type="button"
+        aria-label="Aumenta porzioni"
+        class="servings-control__btn"
+      >
+        +
+      </button>
     </div>
   </div>
 

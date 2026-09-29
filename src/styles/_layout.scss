@@ -13,7 +13,7 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid $color-border;
-  padding-block: $space-4;
+  padding-block: $space-2;
   transition: border-color $transition-fast;
 }
 
@@ -21,7 +21,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: $space-4;
+  gap: $space-3;
 }
 
 .site-logo {
@@ -29,13 +29,14 @@
   align-items: center;
   gap: $space-2;
   font-family: $font-display;
-  font-size: 1.5rem;
+  font-size: 1.15rem;
   font-weight: 400;
   color: $color-text;
   letter-spacing: -0.01em;
+  white-space: nowrap;
 
   .site-logo__icon {
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     transition: transform $transition-fast;
   }
 
@@ -51,16 +52,18 @@
 .site-nav {
   display: flex;
   align-items: center;
-  gap: $space-3;
+  gap: $space-2;
+  margin-left: auto;
 }
 
 .site-nav__link {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: $color-text-secondary;
   padding: $space-2 $space-3;
   border-radius: $radius-full;
   transition: all $transition-fast;
+  white-space: nowrap;
 
   &:hover {
     color: $color-primary;
@@ -119,6 +122,18 @@
 
   .site-header {
     padding-block: $space-4;
+  }
+
+  .site-logo {
+    font-size: 1.5rem;
+
+    .site-logo__icon {
+      font-size: 1.4rem;
+    }
+  }
+
+  .site-nav__link {
+    font-size: 0.9rem;
   }
 
   .site-main {

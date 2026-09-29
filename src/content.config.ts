@@ -31,9 +31,8 @@ const recipes = defineCollection({
       'italiana',
       'colombiana',
       'messicana',
-      'giapponese',
-      'francese',
-      'mediterranea',
+      'asiatica',
+      'americana',
       'altro',
     ]).optional(),
 
