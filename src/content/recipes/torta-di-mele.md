@@ -178,10 +178,10 @@ variants:
    Aggiungere farina, lievito e un pizzico di sale setacciati, lavorando appena il minimo: l'impasto deve restare abbastanza fluido.
 
 5. **Unire mele e impasto**
-   Versare tutte le mele nell'impasto: sembreranno essere troppe rispetto alla massa, ed è esattamente quello che si vuole. Mescolare delicatamente, l'impasto deve solo avvolgere la frutta.
+   Versare tutte le mele nell'impasto assieme ai pinoli, e per la variante l'uvetta. Devono sembrare troppe rispetto alla massa. Mescolare delicatamente, l'impasto deve solo avvolgere la frutta.
 
 6. **Comporre la torta**
-   Rivestire una tortiera a cerniera da 22-24 cm con carta forno, versare il composto e livellarlo, poi distribuire sopra lo zucchero di canna e il rimanete burro (**15g**)a fiocchetti.
+   Rivestire una tortiera a cerniera da 22-24 cm con carta forno, versare il composto e livellarlo, poi distribuire sopra lo zucchero di canna e il rimanete burro (**15g**) a fiocchetti.
 
 7. **Cuocere**
    Cuocere in **forno statico a 165-170°C** per **60-75 minuti** a seconda del forno. La torta è pronta quando è dorata e lo stecchino esce umido ma non bagnato.
