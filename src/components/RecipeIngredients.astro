@@ -119,7 +119,7 @@ function formatIngredientQuantity(ingredient: Ingredient): string {
   </div>
 </section>
 
-<script define:vars={{ originalServings: servings }}>
+<script define:vars={{ originalServings: servings, recipeTitle: title }}>
   let currentServings = originalServings;
 
   const servingsValue = document.querySelector('#servings-value');
@@ -223,7 +223,16 @@ function formatIngredientQuantity(ingredient: Ingredient): string {
       lines.push(qty ? `- ${name} — ${qty}` : `- ${name}`);
     });
 
-    const textToCopy = `Ingredienti per ${currentServings} porzioni:\n\n${lines.join('\n')}`;
+    // The panel carries its own index and the pill at the same index holds the
+    // variant name, so the heading can name the variant that is actually
+    // being copied. Index 0 is the default list, which needs no suffix.
+    const variantIndex = Number(activePanel.getAttribute('data-variant-index') ?? '0');
+    const variantName = variantPills[variantIndex]?.textContent?.trim();
+    const heading =
+      variantIndex > 0 && variantName ? `${recipeTitle} (${variantName})` : recipeTitle;
+
+    const portions = currentServings === 1 ? 'persona' : 'persone';
+    const textToCopy = `${heading} per ${currentServings} ${portions}:\n\n${lines.join('\n')}`;
 
     try {
       await navigator.clipboard.writeText(textToCopy);

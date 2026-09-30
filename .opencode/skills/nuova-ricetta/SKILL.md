@@ -108,7 +108,7 @@ Se vuoi raddoppiare la dose, raddoppia anche la salsa: con la stessa quantità d
 - **Il grassetto dentro la frase è un segnale visivo, non un accento**: la pagina colora in rosso i valori in grassetto, quindi mettilo solo su temperature, minuti, pesi e indizi di cottura ("fino a doratura", "ancora chiaro al centro"). Il resto della frase resta in nero.
 - La numerazione dei passi deve essere **sequenziale** nel sorgente. (Nei biscotti c'è un 1, 3, 4... per un refuso: il markdown rinumera da sé a schermo, ma il file deve restare pulito.)
 - `## Conservazione` serve sempre: tempi concreti, dove, e come si riscalda.
-- `## Consigli` solo se hai qualcosa di vero da dire — la regola che usi tu quando cuoci (sostituzioni, come gestire gli avanzi, come evitare che si rovini). Niente consigli generici tipo "cuocere con amore": se non scriveresti quello a un amico in cucina, non scriverlo qui. Due o tre frasi in voce "noi", come fa la ricetta dei biscotti.
+- `## Consigli` solo se hai qualcosa di vero da dire — la regola che usi tu quando cuoci (sostituzioni, come gestire gli avanzi, come evitare che si rovini e con cosa abbinarlo). Niente consigli generici tipo "cuocere con amore": se non scriveresti quello a un amico in cucina, non scriverlo qui. Due o tre frasi in voce "noi", come fa la ricetta dei biscotti.
 
 ## Varianti
 

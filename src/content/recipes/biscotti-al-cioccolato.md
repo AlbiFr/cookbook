@@ -174,6 +174,8 @@ Durano **4-5 giorni** in un contenitore ermetico, meglio se con un pezzo di mela
 Nel caso congelare l'impasto già porzionato, dura fino a **due mesi**, e poi aggiungere **2 minuti** alla cottura.
 
 ## Consigli
+Ottimo da offriere con gelato alla vaniglia
+
 Se vuoi raddoppiare o tripicale la quantità consigliamo di **aggiungere un tuorlo** (o 20g di bianco) per renderli ancora più chewy
 
 Volendo per biscotti più densi e rustici (ottimo per quelli alla canella) si posso fare **70% con farina bianca e 30% con farina integrale**
