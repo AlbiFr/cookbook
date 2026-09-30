@@ -2,6 +2,23 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
+const ingredient = z.object({
+  quantity: z.number().optional(),
+  unit: z.string().optional(),
+  item: z.string(),
+});
+
+// Ricette senza divisori: la lista è piatta e senza nome.
+// Ricette con divisori: ogni voce è `{ name, items: [...] }`.
+// Le due forme non si confondono mai, perché `item` e `items` sono obbligatori
+// in forma diversa: ogni valore è o una voce o un gruppo, mai entrambe le cose.
+const ingredientGroup = z.object({
+  name: z.string(),
+  items: z.array(ingredient),
+});
+
+const ingredients = z.array(z.union([ingredientGroup, ingredient]));
+
 const recipes = defineCollection({
   loader: glob({
     pattern: '**/*.md',
@@ -53,25 +70,13 @@ const recipes = defineCollection({
 
     image: z.string().optional(),
 
-    ingredients: z.array(
-      z.object({
-        quantity: z.number().optional(),
-        unit: z.string().optional(),
-        item: z.string(),
-      })
-    ),
+    ingredients,
 
     variants: z.array(
       z.object({
         name: z.string(),
         description: z.string().optional(),
-        ingredients: z.array(
-          z.object({
-            quantity: z.number().optional(),
-            unit: z.string().optional(),
-            item: z.string(),
-          })
-        ),
+        ingredients,
       })
     ).optional().default([]),
   }),

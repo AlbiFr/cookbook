@@ -22,6 +22,20 @@ const cuisines = getUniqueValues((r) => r.data.cuisine);
 const seasons = getUniqueValues((r) => r.data.season);
 const tags = [...new Set(recipes.flatMap((r) => r.data.tags))].sort();
 
+// La ricerca cerca per nome ingrediente, quindi i divisori vanno aperti: ogni
+// voceIngrediente è o un ingrediente o un gruppo con dentro i suoi ingredienti.
+type VoceIngrediente =
+  | { quantity?: number; unit?: string; item: string }
+  | { name: string; items: { item: string }[] };
+
+const flattenIngredients = (entries: VoceIngrediente[]): string[] =>
+  entries.flatMap((entry) => ('items' in entry ? entry.items.map((i) => i.item) : [entry.item]));
+
+const ingredientNames = (r: typeof recipes[number]): string[] =>
+  flattenIngredients(r.data.ingredients as VoceIngrediente[]).concat(
+    r.data.variants.flatMap((v) => flattenIngredients(v.ingredients as VoceIngrediente[]))
+  );
+
 // Label mappings (no icons)
 const categoryLabels: Record<string, string> = {
   antipasto: 'Antipasti',
@@ -159,7 +173,7 @@ const seasonLabels: Record<string, string> = {
                   data-description={recipe.data.description?.toLowerCase() ?? ''}
                   data-category={recipe.data.category}
                   data-tags={recipe.data.tags.join('|')}
-                  data-ingredients={[...recipe.data.ingredients, ...recipe.data.variants.flatMap(v => v.ingredients)].map(i => i.item.toLowerCase()).join(' ')}
+                  data-ingredients={ingredientNames(recipe).join(' ').toLowerCase()}
                   data-difficulty={recipe.data.difficulty ?? ''}
                   data-cuisine={recipe.data.cuisine ?? ''}
                   data-season={recipe.data.season ?? ''}

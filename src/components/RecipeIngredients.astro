@@ -5,6 +5,11 @@ interface Ingredient {
   item: string;
 }
 
+interface IngredientGroup {
+  name: string;
+  items: Ingredient[];
+}
+
 interface Variant {
   name: string;
   description?: string;
@@ -36,6 +41,27 @@ function formatIngredientQuantity(ingredient: Ingredient): string {
   const qty = ingredient.quantity ?? '';
   const unit = ingredient.unit ? ` ${ingredient.unit}` : '';
   return `${qty}${unit}`;
+}
+
+// Lo schema accetta due forme: la voce singola (ricette senza divisori) e il
+// gruppo `{ name, items }`. Qui le due forme diventano la stessa struttura, con
+// la lista piatta come un unico gruppo senza nome: da qui in poi la pagina e la
+// copia della lista non devono più distinguere i due casi.
+function toGroups(entries: (Ingredient | IngredientGroup)[]): IngredientGroup[] {
+  const groups: IngredientGroup[] = [];
+
+  for (const entry of entries) {
+    if ('items' in entry) {
+      if (entry.items.length > 0) groups.push(entry);
+      continue;
+    }
+
+    const previous = groups[groups.length - 1];
+    if (previous && !previous.name) previous.items.push(entry);
+    else groups.push({ name: '', items: [entry] });
+  }
+
+  return groups;
 }
 ---
 
@@ -92,22 +118,28 @@ function formatIngredientQuantity(ingredient: Ingredient): string {
       {variant.description && (
         <p class="variant-note">{variant.description}</p>
       )}
-      <ul class="ingredients-list">
-        {variant.ingredients.map((ingredient, i) => (
-          <li
-            class="ingredient"
-            data-quantity={ingredient.quantity ?? ''}
-            data-unit={ingredient.unit ?? ''}
-            data-item={ingredient.item}
-            data-index={i}
-          >
-            <span class="ingredient__text">
-              <span class="ingredient__name">{capitalize(ingredient.item)}</span>
-              <span class="ingredient__quantity">{formatIngredientQuantity(ingredient)}</span>
-            </span>
-          </li>
-        ))}
-      </ul>
+      {toGroups(variant.ingredients).map((group) => (
+        <div class="ingredients-group">
+          {group.name && (
+            <h3 class="ingredients-group__title">{group.name}</h3>
+          )}
+          <ul class="ingredients-list">
+            {group.items.map((ingredient) => (
+              <li
+                class="ingredient"
+                data-quantity={ingredient.quantity ?? ''}
+                data-unit={ingredient.unit ?? ''}
+                data-item={ingredient.item}
+              >
+                <span class="ingredient__text">
+                  <span class="ingredient__name">{capitalize(ingredient.item)}</span>
+                  <span class="ingredient__quantity">{formatIngredientQuantity(ingredient)}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   ))}
 
@@ -214,13 +246,24 @@ function formatIngredientQuantity(ingredient: Ingredient): string {
     const activePanel = document.querySelector('.variant-panel--active');
     if (!activePanel) return;
 
-    const items = activePanel.querySelectorAll('.ingredient');
-    const lines = [];
+    // Si copia gruppo per gruppo, così il divisore finisce nella lista della
+    // spesa. Le ricette senza divisori hanno un solo gruppo senza titolo: il
+    // risultato è identico a quello di prima, intestazione e righe vuote in più.
+    const blocks = [];
 
-    items.forEach((item) => {
-      const qty = item.querySelector('.ingredient__quantity')?.textContent?.trim() ?? '';
-      const name = item.querySelector('.ingredient__name')?.textContent?.trim() ?? '';
-      lines.push(qty ? `- ${name} — ${qty}` : `- ${name}`);
+    activePanel.querySelectorAll('.ingredients-group').forEach((group) => {
+      const block = [];
+      const groupTitle = group.querySelector('.ingredients-group__title')?.textContent?.trim();
+
+      if (groupTitle) block.push(groupTitle.toUpperCase());
+
+      group.querySelectorAll('.ingredient').forEach((item) => {
+        const qty = item.querySelector('.ingredient__quantity')?.textContent?.trim() ?? '';
+        const name = item.querySelector('.ingredient__name')?.textContent?.trim() ?? '';
+        block.push(qty ? `- ${name} — ${qty}` : `- ${name}`);
+      });
+
+      if (block.length > 0) blocks.push(block.join('\n'));
     });
 
     // The panel carries its own index and the pill at the same index holds the
@@ -232,7 +275,7 @@ function formatIngredientQuantity(ingredient: Ingredient): string {
       variantIndex > 0 && variantName ? `${recipeTitle} (${variantName})` : recipeTitle;
 
     const portions = currentServings === 1 ? 'persona' : 'persone';
-    const textToCopy = `${heading} per ${currentServings} ${portions}:\n\n${lines.join('\n')}`;
+    const textToCopy = `${heading} per ${currentServings} ${portions}:\n\n${blocks.join('\n\n')}`;
 
     try {
       await navigator.clipboard.writeText(textToCopy);

@@ -127,7 +127,35 @@ variants:
 
 - `name`: 2-3 parole, è il testo della pillola (`Alla canella`, `Con olio di cocco`).
 - `description`: una riga che dice **cosa cambia** rispetto all'originale. Appare in un box giallo sopra la lista.
-- `ingredients`: la lista **completa**, non un diff rispetto all'originale. Attenzione: la pagina scala tutte le varianti sul `servings` principale, quindi ogni variante deve stare in piedi da sola per quel numero di porzioni.
+- `ingredients`: la lista **completa**, non un diff rispetto all'originale. Attenzione: la pagina scala tutte le varianti sul `servings` principale, quindi ogni variante deve stare in piedi da sola per quel numero di porzioni. Se l'originale usa i divisori, la variante li ripete: stessi nomi, stessi gruppi.
+
+### Divisori di sezione
+
+Quando la ricetta si prepara in fasi distinte (`per le mele`, `per l'impasto`, `per la copertura`, `per il sugo`), raggruppa la lista: la pagina stampa un'intestazione prima di ogni gruppo e la copia della lista per la spesa la riporta. Il gruppo è una voce con `name` e `items`, e dentro ci sono le normali voci ingrediente:
+
+```yaml
+ingredients:
+  - name: per le mele
+    items:
+      - quantity: 1.3
+        unit: kg
+        item: mele grandi
+
+      - quantity: 40
+        unit: g
+        item: burro
+
+  - name: per l'impasto
+    items:
+      - quantity: 100
+        unit: g
+        item: farina
+```
+
+- I due stili sono equivalenti e si possono mescolare nella stessa ricetta: una voce senza `items` sta fuori da ogni divisore.
+- I nomi si scrivono **come nel tuo elenco di lavoro**, quindi minuscoli (`per la copertura`): la pagina li mette in maiuscolo da sé.
+- 2-4 gruppi: se sono due (`per la salsa`, `per il pesce`) è già un muro, valuta la lista piatta.
+- Con i divisori non serve più distinguere l'ingrediente nel nome (`zucchero di canna per la copertura` diventa `zucchero di canna` dentro `per la copertura`).
 
 ## Immagine
 
@@ -215,6 +243,7 @@ Se lo schema rifiuta il file, l'errore è del tipo `InvalidContentEntryDataError
 - [ ] Passi in infinito, numerazione sequenziale, grassetto solo sui valori utili
 - [ ] `Conservazione` presente, `Consigli` solo se c'è qualcosa di vero
 - [ ] Varianti con la lista completa, se presenti
+- [ ] Se la ricetta ha fasi di preparazione distinte, i divisori di sezione sono al posto giusto (e le varianti li ripetono)
 - [ ] `image` solo se il file esiste davvero, e con il base `/cookbook`
 - [ ] Verifica online fatta **solo** se l'utente l'ha chiesta, e in quel caso riportata in chat con le fonti
 - [ ] `npm run build` passa

@@ -90,6 +90,24 @@
   font-style: italic;
 }
 
+// Spazio sopra ogni divisore, primo compreso: abbastanza da leggere
+// "per le mele" come l'inizio di una sezione e non come una riga in più.
+// Il primo gruppo è dentro `.variant-panel`, quindi va preso esplicitamente.
+.ingredients-group + .ingredients-group,
+.variant-panel > .ingredients-group:first-child {
+  margin-top: $space-5;
+}
+
+.ingredients-group__title {
+  margin: 0 0 $space-1;
+  padding: 0 $space-2;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: $color-muted;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 .ingredients-list {
   display: flex;
   flex-direction: column;
