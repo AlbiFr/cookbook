@@ -8,7 +8,7 @@ tags:
   - forno
   - cena con amici
 
-servings: 10
+servings: 4
 
 cuisine: americana
 season: tutto l'anno
@@ -18,7 +18,7 @@ cookTime: 12
 
 difficulty: facile
 
-image: \public\images\recepies\chocolate_chip_cookies.jpg
+image: \public\images\recipes\chocolate_chip_cookies.jpg
 
 ingredients:
   - quantity: 175
@@ -38,7 +38,6 @@ ingredients:
     item: zucchero bianco
 
   - quantity: 1
-    unit: uova
     item: uova
 
   - quantity: 1
