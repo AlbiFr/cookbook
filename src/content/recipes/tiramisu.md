@@ -17,20 +17,21 @@ cookTime: 0
 
 difficulty: facile
 
+image: /images/recipes/tiramisu.jpg
+
 ingredients:
   - quantity: 500
     unit: g
     item: mascarpone
 
   - quantity: 4
-    unit: uova
     item: uova
 
   - quantity: 100
     unit: g
     item: zucchero
 
-  - quantity: 300
+  - quantity: 200
     unit: g
     item: savoiardi
 
@@ -64,3 +65,6 @@ ingredients:
 ## Conservazione
 
 Conservare in frigorifero per un massimo di **2 giorni**, coperto con pellicola.
+
+## Consigli
+Puoi aggiungere uno strato di goccie di cioccolato per renderlo super goloso

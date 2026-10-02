@@ -12,6 +12,8 @@ const baseUrl = import.meta.env.BASE_URL.endsWith('/')
   ? import.meta.env.BASE_URL
   : `${import.meta.env.BASE_URL}/`;
 
+const imageUrl = image ? `${baseUrl}${image.replace(/^\/+/, '')}` : undefined;
+
 const categoryIcons: Record<string, string> = {
   antipasto: '🥖',
   primo: '🍝',
@@ -26,9 +28,9 @@ const categoryIcons: Record<string, string> = {
 
 <a href={`${baseUrl}recipes/${slug}/`} class="recipe-card" data-category={category}>
   <div class="recipe-card__media">
-    {image ? (
+    {imageUrl ? (
       <img
-        src={image}
+        src={imageUrl}
         alt={title}
         class="recipe-card__image"
         loading="lazy"

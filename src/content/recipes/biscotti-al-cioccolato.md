@@ -18,7 +18,7 @@ cookTime: 12
 
 difficulty: facile
 
-image: \public\images\recipes\chocolate_chip_cookies.jpg
+image: /images/recipes/chocolate_chip_cookies.jpg
 
 ingredients:
   - quantity: 175

@@ -11,12 +11,14 @@ tags:
 servings: 4
 
 cuisine: italiana
-season: inverno
+season: "tutto l'anno"
 
 prepTime: 20
 cookTime: 35
 
 difficulty: media
+
+image: /images/recipes/tartatin-carote.jpg
 
 ingredients:
   - quantity: 800
