@@ -19,6 +19,8 @@ cookTime: 70
 
 difficulty: media
 
+image: /images/recipes/torta-di-mele.jpg
+
 ingredients:
   - name: per le mele
     items:

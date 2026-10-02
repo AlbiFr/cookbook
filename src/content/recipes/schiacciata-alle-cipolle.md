@@ -1,6 +1,6 @@
 ---
 title: Schiacciata alle cipolle
-description: Schiacciata sottilissima con cipolle appassite, croccante ma tenera al centro.
+description: Schiacciata sottilissima con cipolle, croccante ma tenera al centro.
 
 category: antipasto
 

@@ -11,10 +11,34 @@ Il ricettario è una content collection Astro: ogni ricetta è **un file markdow
 
 1. **Leggi i riferimenti** (vedi sotto) — ti dicono il tono e la struttura, che non si inventano.
 2. **Ricava i dati**: titolo, categoria, porzioni, tempi, lista ingredienti, procedura. Se l'utente incolla una ricetta straniera, traduci i nomi degli ingredienti in italiano ma lascia i nomi delle tecniche riconoscibili (`mise en place`, `blanch`, `brunoise` → dillo in italiano con il termine originale tra parentesi solo se serve).
-3. **Fai il controllo aritmetico** (vedi "Controllo aritmetico"): è gratuito, ci mette dieci secondi e va fatto sempre, anche senza aprire il web.
-4. **Verifica online, solo se l'utente la chiede esplicitamente** (vedi "Verifica online"). Non cercare ricette su internet di tua iniziativa: le ricette hanno dosi regionali che vanno bene anche se non corrispondono alla media, e la ricetta della nonna non è un errore solo perché il web dice un'altra cosa.
-5. **Scrivi il file** in `src/content/recipes/<slug>.md` e nient'altro. Non creare cartelle, non toccare `content.config.ts`, non modificare le altre ricette, non registrare la ricetta da nessuna parte (il glob le prende da solo e la home la mostra automaticamente).
-6. **Verifica con il build** (vedi "Verifica").
+3. **Scegli la via facile** (vedi "Il piatto deve essere facile da fare"): a parità di piatto, valuta sempre la versione con meno ingredienti, meno strumenti e meno tegami. È il passaggio che decide se la ricetta verrà fatta o abbandonata a metà.
+4. **Fai il controllo aritmetico** (vedi "Controllo aritmetico"): è gratuito, ci mette dieci secondi e va fatto sempre, anche senza aprire il web.
+5. **Verifica online, solo se l'utente la chiede esplicitamente** (vedi "Verifica online"). Non cercare ricette su internet di tua iniziativa: le ricette hanno dosi regionali che vanno bene anche se non corrispondono alla media, e la ricetta della nonna non è un errore solo perché il web dice un'altra cosa.
+6. **Scrivi il file** in `src/content/recipes/<slug>.md` e nient'altro. Non creare cartelle, non toccare `content.config.ts`, non modificare le altre ricette, non registrare la ricetta da nessuna parte (il glob le prende da solo e la home la mostra automaticamente).
+7. **Verifica con il build** (vedi "Verifica").
+
+## Il piatto deve essere facile da fare
+
+Il default è `difficulty: facile`, e va guadagnato il contrario. Una ricetta esiste per essere eseguita da qualcuno che non ci sta pensando: se tra la prima e l'ultima riga deve prendere due decisioni, la ricetta è sbagliata.
+
+- **A parità di piatto, vince il metodo più semplice.** Zucchine a fette cotte con la cipolla invece di frullate in crema: stesso risultato, nessun frullatore, 6 passi invece di 7. Un risotto senza vino è un risotto più facile, e quasi nessuno nota il vino assente.
+- **Togli tutto ciò che il piatto non cambia.** Un sugo di soffritto e acqua è indistinguibile dal sugo a otto ingredienti se poi copri tutto con burro e parmigiano. Ogni ingrediente in più è un passaggio, una riga di spesa e una cosa che può finire esaurita in dispensa.
+- **Meno strumenti.** Frullatore ad immersione, termometro, planetaria, colino: due strumenti per una ricetta da 30 minuti sono un vezzo, non una tecnica. Se la consistenza che cerchi si può ottenere anche senza, lo strumento non serve.
+- **Un tegame, per quanto possibile.** Ogni tegame in più è un passaggio in più (travasare, lavare, scaldare) e un momento in cui il piatto si raffredda. Se tutto si fa in una pentola, si fa in una pentola.
+- **Meno passi, ma pieni.** Non si tratta di accorpare: otto micro-passi ("scolare", "asciugare", "tagliare") sono peggio di quattro passi che contengono ognuno due cose da fare. Un passo vale quanto le azioni reali che contiene, e un passo senza azioni è solo un titolo.
+- **Se una tecnica si può sbagliare, scelgine un'altra.** Glassature, il punto di cottura esatto di una crema, lievitazioni a mano: se esiste un metodo più tollerante che dà un piatto accettabile, preferiscilo. La tecnica dura si tiene solo se è *il* piatto e non una sua versione.
+
+Esempio, lo stesso piatto in due versioni:
+
+| | versione complicata | versione facile |
+| --- | --- | --- |
+| zucchine | frullate in crema, cotte a parte | a fette, cotte con la cipolla |
+| tegami | due, più la pentola del riso | uno |
+| strumenti | frullatore ad immersione, mestolo per la crema | nessuno |
+| passi | 7, con due momenti in cui il piatto si raffredda | 6, tutto in sequenza |
+| vino | sì, sfumatura in un momento separato | no |
+
+Il risultato in tavola è lo stesso. Scegli la seconda riga.
 
 ## Leggi prima di scrivere
 
@@ -69,7 +93,7 @@ Regole campo per campo:
 - **`cuisine`** — uno di `italiana`, `colombiana`, `messicana`, `asiatica`, `americana`, `altro`. Se la ricetta non è di una cucina precisa, `altro` va bene.
 - **`season`** — uno di `primavera`, `estate`, `autunno`, `inverno`, `tutto l'anno`. Mettilo solo se è onesto (una minestra d'inverno con `tutto l'anno` non serve a nessuno).
 - **`prepTime` / `cookTime`** — minuti interi, `prepTime` = lavoro attivo, `cookTime` = forno/riposo. Se non c'è cottura: `0` (la pagina scrive "Nessuna") oppure ometti il campo, come preferisci.
-- **`difficulty`** — `difficile` appena c'è una tecnica che si può sbagliare (una glassatura, un punto esatto di cottura, una lievitazione)`media` quanto richiede tanto tempo di preparazione come impastare. `facile` se è a prova di distratto.
+- **`difficulty`** — il default è `facile` e va guadagnato il contrario. `media` solo per una tecnica sola, spiegata bene nel passo, che si può sbagliare (una glassatura, un punto di cottura esatto). `difficile` quasi mai, e solo se la tecnica è *il* piatto e non una sua versione più tollerante. Se ti viene `media` senza sapere dire quale passaggio è quello difficile, è `facile`. Vedi "Il piatto deve essere facile da fare".
 
 ### Numeri e unità
 
@@ -109,6 +133,62 @@ Se vuoi raddoppiare la dose, raddoppia anche la salsa: con la stessa quantità d
 - La numerazione dei passi deve essere **sequenziale** nel sorgente. (Nei biscotti c'è un 1, 3, 4... per un refuso: il markdown rinumera da sé a schermo, ma il file deve restare pulito.)
 - `## Conservazione` serve sempre: tempi concreti, dove, e come si riscalda.
 - `## Consigli` solo se hai qualcosa di vero da dire — la regola che usi tu quando cuoci (sostituzioni, come gestire gli avanzi, come evitare che si rovini e con cosa abbinarlo). Niente consigli generici tipo "cuocere con amore": se non scriveresti quello a un amico in cucina, non scriverlo qui. Due o tre frasi in voce "noi", come fa la ricetta dei biscotti.
+
+## La procedura deve essere operativa
+
+Un passo deve potersi eseguire leggendolo una volta sola, senza rileggerlo e senza dover chiedere "quanto?", "quanto deve cuocere ancora?", "e adesso?". Chi lo legge non ha la ricetta in testa e non ha tempo da perdere: è già in cucina.
+
+- **Il passo dice cosa fare, non di che cosa parla.** Il titolo nomina l'azione (`Preparare il soffritto`), ma è la frase dopo che deve essere l'istruzione. Un titolo senza frase è un titolo, non un passo.
+- **Via gli avverbi che non aggiungono niente.** "cuocere adeguatamente", "mescolare bene", "fino a cottura", "a piacere" (senza dire di cosa), "a seconda del caso". Ogni volta che ne scrivi uno, sostituiscilo con qualcosa di misurabile: un tempo, un colore, un odore, una consistenza.
+- **Un tempo da solo non basta mai.** 8 minuti a fuoco vivo e 8 minuti a fuoco dolce non sono lo stesso tempo, e 8 minuti di pentola grande e di pentola piccola non sono lo stesso tempo. A ogni durata abbinare lo stato che devi vedere quando è passata.
+- **L'indizio deve essere qualcosa che il cuoco può percepire**, non una misura che non ha:
+  - colore — "finché i bordi sono dorati e il centro ancora chiaro"
+  - odore — "finché non ha più l'odore acre del concentrato"
+  - consistenza — "il riso è pronto quando, scuotendo il tegame, fa un'onda che scorre e si richiude"
+  - rumore — "finché non si sente più sfrigolare l'olio"
+  - tempo residuo — "dovrà cuocere altri 5 minuti"
+- **Nei tempi di attesa, dì cosa fare.** Il forno sta acceso 30 minuti: di' cosa preparare nel frattempo e cosa lasciare fuori dal frigo, e quando. Un passo che è solo un'attesa sprecata il tempo che descrive.
+- **Dì dove mettere le cose.** "Tenere da parte" senza indicare il postovuol dire una ciotola sul bancone e poi roba fredda nel tegame.
+- **Con due pentole, di' a cosa serve ciascuna**, altrimenti finisce il "ma quale era il sugo?".
+- **Non ripetere il passo prima.** "Continuare a mescolare" è un legamento e va bene; "aggiungere poi tutti gli altri ingredienti" è un passo vuoto.
+
+```
+Cattivo: Scaldare l'olio e far soffriggere la cipolla tritata per 5 minuti, poi aggiungere il riso.
+
+Buono:   Scaldare l'olio in una pentola capiente a fuoco medio e far appassire la cipolla
+          tritata finemente per **5 minuti**, senza che prenda colore: deve restare trasparente
+          e tenera, mai dorata. Quando non si sente più sfrigolare l'olio, è pronta: a quel
+          punto versare il riso e mescolare.
+```
+
+## Niente passi di riempimento
+
+L'ultimo passo è quello che il lettore usa per capire quando può smettere, ed è anche quello che si riempie più spesso di aritmetica che non è un'operazione di cucina.
+
+Da non scrivere mai, né come ultimo passo né altrove:
+
+- "Tagliare la torta in 8 fette", "tagliare in 12 pezzi"
+- "Servire in 4 piatti", "disporre nei piatti", "sistemare in una ciotola"
+- "Spargere il burro a crudo e portare in tavola" quando è solo il punto in cui il piatto smette di stare in piedi
+
+Il motivo è pratico, non estetico: la divisione in porzioni è già il lavoro del campo `servings` e dei pulsanti +/− della pagina. Ripeterla nella procedura crea una **seconda fonte di verità che può contraddirsi**, ed è esattamente da lì che nasce una ricetta che dice "8 fette" con `servings: 6`. In più non insegna niente, ed è il passo che nessuno legge.
+
+Cosa scrivere al suo posto, nell'ordine di preferenza:
+
+1. **L'indizio di pronto**, che è il passo più importante in assoluto
+2. **La finitura**: cosa si aggiunge alla fine e quanto ("burro e parmigiano fuori dal fuoco, mescolando energicamente")
+3. **Il momento del servizio**, quando c'è un motivo per cui conta ("si serve subito, il riso non aspetta")
+4. **Come si regge il piatto**, se è un'operazione vera ("coprire con carta forno e tenere in forno spento, con il forno ancora caldo, per 10 minuti")
+
+Se il numero di pezzi serve davvero per un'operazione — una torta da tagliare prima di sfornare, un pane da incidere — scrivi **solo l'operazione**, senza la divisione in porzioni. Il conto sulle porzioni resta nel "Controllo aritmetico", che è un controllo e non un commento.
+
+```
+Cattivo: 7. Tagliare la torta in 8 fette e servire nei piatti.
+
+Buono:   7. Togliere la carta forno e tagliare in 8 fette con un coltello seghettato, mentre è
+             ancora tiepida: le fette restano pulite e non si sbriciolano. Servire subito.
+```
+
 
 ## Varianti
 
@@ -160,22 +240,21 @@ ingredients:
 ## Immagine
 
 1. Guarda `public/images/recipes/` e vedi se c'è già un file che fa per questa ricetta.
-2. Se c'è, `image:` deve essere l'URL pubblico **con il `base` di `astro.config.mjs`** (oggi `/cookbook`): `image: /cookbook/images/recepies/pulled_pork.jpg`. Il campo finisce grezzo nell'`src` dell'immagine, senza che Astro gli aggiunga il base, quindi un path senza `/cookbook` dà un'immagine rotta.
+2. Se c'è, `image:` è il path **dentro `public/`**, senza il `base`: `image: /images/recipes/pulled_pork.jpg`. I componenti (`src/components/RecipeCard.astro` e `src/pages/recipes/[slug].astro`) aggiungono da soli `import.meta.env.BASE_URL` davanti a quel path, quindi aggiungere `/cookbook` a mano darebbe `/cookbook/cookbook/images/...` e l'immagine non si vedrebbe.
 3. Se il file non esiste, **ometti il campo**: la card mostra il placeholder con l'emoji della categoria, che è meglio di un'immagine rotta. Non generare path che puntano a file inesistenti.
 
 ## Controllo aritmetico
 
 Questo passaggio non usa il web e va fatto **sempre**: dieci secondi di carta e matita che valgono più di qualunque ricerca.
 
-Il controllo è uno solo, ed è quello che quasi nessuno fa: **la massa (o il volume) degli ingredienti deve essere divisibile per `servings` con la dimensione della porzione che la procedura indica.**
+Il controllo è uno solo, ed è quello che quasi nessuno fa: **la massa (o il volume) degli ingredienti deve essere divisibile per `servings` con una porzione che abbia senso a tavola.**
 
-- Somma le quantità. Sale, pepe e spezie in `qb` non contano, sono trascurabili.
-- Guarda cosa dice la procedura sulla dimensione di una porzione: "palline da 40 g", "8 fette", "una teglia".
-- Dividi, e confronta con `servings`.
+- Somma le quantità. Sale, pepe e spezie in `qb` non contano, sono trascurabili. Sottrai i liquidi che evaporano (burro, olio, vino) e ricorda che il verdura cotta e il riso perdono acqua: la porzione servita pesa meno della somma degli ingredienti.
+- Dividi per `servings`, e controlla che la porzione risultante sia una porzione reale. Riferimenti pratici: una pasta 80-100 g a testa, un secondo 180-250 g, un dolce 90-120 g, una zuppa 300-400 ml, un risotto 300-400 g.
+- Se la porzione esce sproporzionata, correggi `servings`. È il campo che guida anche i pulsanti +/− della pagina, quindi è il numero che non deve mentire.
+- Se un numero di pezzi compare nella procedura ("formare 15 palline", "incidere 4 tagli"), deve tornare con `servings`: 15 palline da 40 g sono 600 g, quindi `servings: 6`, non `servings: 4`.
 
-Esempio: 400 g di impasto, procedura che dice "taglia in 8 fette", ma `servings: 6`. 400/6 fa 67 g a fetta, che non è 8 fette da 50 g. O il `servings` è sbagliato, o è sbagliata la porzione nella procedura — e se sono in conflitto, **la procedura ha ragione**, perché è quella che descrive il piatto reale. Correggi il campo, non il testo del passo.
-
-Il secondo controllo è la coerenza tra categorie: se il passo dice "formare 15 palline" o "rende 6 porzioni", quei numeri devono concordare con `servings` e con la somma di cui sopra.
+Esempio: 400 g di impasto con `servings: 6` fanno 67 g a fetta, che è porto abbondante per un biscotto e giusto per una fetta di torta. Il dubbio va risolto sul campo, prima di scrivere: se il piatto è un dolce da fette, `servings: 6` va bene e non c'è da cambiare nient'altro — e nel file la divisione in fette **non si scrive**, perché è il lavoro del campo `servings`.
 
 Quando il calcolo torna, non scriverlo nel `.md`: è un controllo, non un commento.
 
@@ -238,13 +317,17 @@ Se lo schema rifiuta il file, l'errore è del tipo `InvalidContentEntryDataError
 
 - [ ] Un solo file nuovo in `src/content/recipes/`, nome in kebab-case senza accenti né spazi
 - [ ] `category`, `servings` e `ingredients` presenti; quantità come numeri, decimali con il punto
-- [ ] Controllo aritmetico fatto: la somma delle quantità si divide per `servings` con la porzione che dice la procedura, e i numeri citati nei passi concordano
+- [ ] **È la versione facile**: nessun ingrediente, tegame o strumento che si possa togliere senza cambiare il piatto; `difficulty` è `facile` se non sai dire quale passaggio è quello difficile
+- [ ] Controllo aritmetico fatto: la somma delle quantità divisa per `servings` dà una porzione che ha senso a tavola, e i numeri citati nei passi concordano
 - [ ] I tag sono già usati altrove nella cartella
 - [ ] Passi in infinito, numerazione sequenziale, grassetto solo sui valori utili
+- [ ] **Ogni passo con un tempo ha anche il suo indizio di cottura** nella stessa frase, e l'ultimo passo dice come si capisce che è pronto
+- [ ] **L'ultimo passo finisce sul piatto**, non su un conteggio: nessun "taglia in 8 fette", nessun "servi in 4 piatti"
+- [ ] Nei tempi di attesa si dice cosa fare nel frattempo
 - [ ] `Conservazione` presente, `Consigli` solo se c'è qualcosa di vero
 - [ ] Varianti con la lista completa, se presenti
 - [ ] Se la ricetta ha fasi di preparazione distinte, i divisori di sezione sono al posto giusto (e le varianti li ripetono)
-- [ ] `image` solo se il file esiste davvero, e con il base `/cookbook`
+- [ ] `image` solo se il file esiste davvero, e senza il base (i componenti lo aggiungono)
 - [ ] Verifica online fatta **solo** se l'utente l'ha chiesta, e in quel caso riportata in chat con le fonti
 - [ ] `npm run build` passa
 - [ ] Nessun altro file toccato
@@ -254,10 +337,14 @@ Se lo schema rifiuta il file, l'errore è del tipo `InvalidContentEntryDataError
 | Sintomo | Causa |
 | --- | --- |
 | Le quantità non cambiano con i pulsanti +/- | `quantity: "175"` come stringa invece di numero |
-| Errore YAML sulla riga `season` | `tutto l'anno` non tra virgolette: `season: "tutto l'anno"` |
+| Errore YAML su `description` o `season` | `:` o `'` non quotati: `description: "Sale in testa: come si fa."`, `season: "tutto l'anno"` |
 | Step che saltano un numero | Numerazione non sequenziale nel sorgente |
 | La variante ha 2 ingredienti | Le varianti vogliono la lista intera, non il differenziale |
-| Immagine che non si vede | Manca il `/cookbook` (vedi `astro.config.mjs`) |
+| Immagine che non si vede | `image:` ha il `/cookbook` scritto a mano: i componenti aggiungono già il base |
 | La ricetta finisce nella sezione sbagliata | `category` con un valore fuori dall'enum in `content.config.ts` |
-| "Rende 12 fette" ma `servings: 6` | Manca il controllo aritmetico: 400 g / 6 non fa fette da 50 g |
-| I biscitti vengono piatti | Le dosi di lievito hanno senso solo se la ricetta è pensata per essere densa: controlla, non dare per scontato |
+| I biscotti vengono piatti | Le dosi di lievito hanno senso solo se la ricetta è pensata per essere densa: controlla, non dare per scontato |
+| La ricetta si finisce con "taglia in 8 fette" o "servi in 4 piatti" | Passo di riempimento: la divisione in porzioni è il lavoro di `servings` e dei pulsanti +/− |
+| "Cuocere per 20 minuti" e nient'altro | Un tempo senza indizio è un tempo sbagliato da scrivere: aggiungi colore, odore o consistenza |
+| Il piatto richiede tre tegami | Passaggi che scaldano e raffreddano: valuta la versione in un tegame solo |
+| `difficulty: media` senza una tecnica precisa | Il default è `facile`: la difficoltà va guadagnata, non ereditata dalla fonte |
+| Un passo che è solo "Preparare il soffritto" | Titolo senza istruzione: il passo dice cosa fare, non di che cosa parla |

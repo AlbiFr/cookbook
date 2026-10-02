@@ -1,8 +1,8 @@
 ---
 title: Tartatin di Carote
-description: Tartaten di carote caramellate con aceto balsamico su pasta sfoglia, con timo e formaggio.
+description: Un antipasto super raffinato, poco sbatti ma mooolto bello
 
-category: contorno
+category: antipasto
 
 tags:
   - forno

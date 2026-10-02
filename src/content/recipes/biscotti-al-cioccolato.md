@@ -1,6 +1,6 @@
 ---
 title: Chocolate chips cookie
-description: Morbidi dentro, croccanti fuori, con gocce di cioccolato fondente.
+description: Uno dei nostri dolci forti, ottimo da portare ad una cena
 
 category: dolce
 
