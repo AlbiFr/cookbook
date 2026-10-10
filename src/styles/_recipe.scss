@@ -248,6 +248,26 @@
     color: $color-text;
   }
 
+  // Link ad altre pagine interne del ricettario: evidenziati e sottolineati,
+  // così si distingue subito un rimando dalla ricetta normale.
+  a {
+    color: $color-primary;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: rgba(182, 83, 60, 0.45);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 2px;
+    transition: color $transition-fast, background-color $transition-fast,
+      text-decoration-color $transition-fast;
+
+    &:hover,
+    &:focus-visible {
+      color: $color-primary-dark;
+      text-decoration-color: currentColor;
+      background-color: $color-primary-subtle;
+    }
+  }
+
   blockquote {
     margin: $space-6 0;
     padding: $space-4 $space-5;

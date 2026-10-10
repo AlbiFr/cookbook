@@ -16,7 +16,27 @@ const getUniqueValues = (getter: (r: typeof recipes[number]) => string | undefin
   ].sort();
 };
 
-const categories = getUniqueValues((r) => r.data.category);
+// Ordine desiderato delle sezioni nella home; le categorie non elencate
+// finiscono in coda, così aggiungerne una nuova non richiede di toccare qui.
+const categoryOrder = [
+  'piatto unico',
+  'antipasto',
+  'primo',
+  'secondo',
+  'dolce',
+  'salse/basi',
+  'contorno',
+  'bibita',
+];
+
+const categories = getUniqueValues((r) => r.data.category).sort((a, b) => {
+  const indexA = categoryOrder.indexOf(a);
+  const indexB = categoryOrder.indexOf(b);
+  return (
+    (indexA === -1 ? categoryOrder.length : indexA) -
+    (indexB === -1 ? categoryOrder.length : indexB)
+  );
+});
 const difficulties = getUniqueValues((r) => r.data.difficulty);
 const cuisines = getUniqueValues((r) => r.data.cuisine);
 const seasons = getUniqueValues((r) => r.data.season);
@@ -191,6 +211,19 @@ const seasonLabels: Record<string, string> = {
         );
       })}
     </div>
+
+    <script is:inline>
+      // Mescola le ricette dentro ogni carosello a ogni caricamento della home.
+      // Inline e subito dopo il grid: gira durante il parse, prima del primo paint.
+      document.querySelectorAll('#recipe-grid .carousel').forEach((carousel) => {
+        const items = Array.from(carousel.children);
+        for (let i = items.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [items[i], items[j]] = [items[j], items[i]];
+        }
+        items.forEach((el) => carousel.appendChild(el));
+      });
+    </script>
 
     <!-- Empty State -->
     <div id="no-results" class="no-results hidden">

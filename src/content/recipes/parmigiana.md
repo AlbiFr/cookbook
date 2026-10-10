@@ -54,25 +54,25 @@ ingredients:
 
 ## Preparazione
 
-1. **Preparare le melanzane**:
+1. **Preparare le melanzane**
    Tagliare le melanzane a fette, salarle e lasciarle riposare per circa **20 minuti** per eliminare l'amaro.
 
 2. **Taglia la mozzarella**
     Taglia la mozzarella a fetta e lasciala in frigo in uno scolino per farla asciugare
 
-3. **Cuocere le melanzane**:
+3. **Cuocere le melanzane**
    Asciugare le melanzane e cuocerle in forno a **180°C** fino a quando saranno morbide e leggermente dorate.
 
-4. **Preparare il sugo**:
+4. **Preparare il sugo**
    Preparare il sugo di pomodoro con olio, aglio, basilico e sale.
 
-5. **Comporre la parmigiana**:
+5. **Comporre la parmigiana**
    Tagliare la mozzarella e comporre la parmigiana alternando melanzane, sugo, mozzarella e parmigiano in una teglia. sull'ultimo strato spolverare il pan grattato
 
-6. **Cottura**:
+6. **Cottura**
    Cuocere in forno a **180°C** per circa **40 minuti**, fino a quando la superficie è dorata e bubbling.
 
-7. **Riposo**:
+7. **Riposo**
    Lasciare riposare almeno **10-15 minuti** prima di servire per far assestare gli strati.
 
 ## Conservazione
