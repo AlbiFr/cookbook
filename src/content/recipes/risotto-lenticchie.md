@@ -76,8 +76,7 @@ ingredients:
    Scolare le lenticchie e sciacquarle sotto l'acqua corrente per eliminare il liquido di governo e il sale in eccesso. Sgocciolarle bene e tenerle da parte.
 
 2. **Preparare il soffritto**
-   Tritare finemente cipolla, carota e sedano. Scaldare un filo d'olio in una pentola capiente e aggiungere le verdure.
-   Cuocere per **8 minuti a fuoco medio**, mescolando di tanto in tanto e senza lasciarle prendere colore. Il soffritto è pronto quando le verdure sono molto morbide e quasi completamente sciolte.
+   Preparare il soffritto seguendo la [ricetta del soffritto](../soffritto/), direttamente nella pentola capiente del risotto.
 
 3. **Cuocere il concentrato**
    Aggiungere il concentrato di pomodoro e mescolare bene, raschiando il fondo della pentola.
