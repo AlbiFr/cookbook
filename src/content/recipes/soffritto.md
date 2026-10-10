@@ -17,6 +17,8 @@ cookTime: 10
 
 difficulty: facile
 
+image: /images/recipes/soffritto.jpg
+
 ingredients:
   - quantity: 1
     item: cipolla piccola
